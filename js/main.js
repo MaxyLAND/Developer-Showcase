@@ -29,7 +29,7 @@ window.onload = function() {
 
     $('#logo-m-bright').delay(550)
         .animate({
-            'background-position-x': 300
+            'background-position-x': '20vw'
         }, {
             duration: 2500,
             easing: 'easeOutExpo',
@@ -41,7 +41,7 @@ window.onload = function() {
 
     $('#logo-l-bright').delay(550)
         .animate({
-            'background-position-x': 300
+            'background-position-x': '20vw'
         }, {
             duration: 2500,
             easing: 'easeOutExpo',
@@ -63,7 +63,7 @@ window.onload = function() {
         }
     );
 
-    $('#logo-text').delay(800)
+    $('#logo-text').delay(1000)
         .animate({
             width: '55%'
         }, {
@@ -76,13 +76,13 @@ window.onload = function() {
     );
 
     $("#logo-text span").each(function(index) {
-        $(this).delay(1200 + 50 * -index).animate({ opacity: 1 }, 800);
+        $(this).delay(1400 + 80 * -index).animate({ opacity: 1 }, 800);
     });
 
 
     $('#logo-subtext').delay(1200)
         .animate({
-            margin: '28% 0 0 0',
+            top: '65%',
             opacity: 1
         }, {
             duration: 500,
