@@ -1,6 +1,7 @@
-<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 720" width="720" height="720">
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8" width="8" height="8">
+	<title>square-svg</title>
 	<style>
 		.s0 { fill: #2f2f2f } 
 	</style>
-	<path id="Background" class="s0" d="m360 0.3l360 360-360 360-360-360z"/>
+	<path id="Background" class="s0" d="m4 0l4 4-4 4-4-4z"/>
 </svg>

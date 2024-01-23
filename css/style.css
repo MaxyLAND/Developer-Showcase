@@ -32,12 +32,14 @@ body div {
     width: 100%;
     height: 100%;
     background-image: url(../img/square.svg);
-    background-size: 20%;
+    background-size: 45vh;
     background-repeat: repeat;
+    background-position-x: center;
     background-attachment: fixed;
     z-index: -2;
     opacity: 0.8;
     filter: drop-shadow(0.6vw 0.6vw 1vw rgba(0, 0, 0));
+    transform: translate3d(0,0,0)
 }
 
 .static-gradient {
@@ -201,4 +203,42 @@ body div {
 #logo-subtext-small {
     font-size: 1.2vw;
     color: white;
+}
+
+#total-visitors {
+    position: absolute;
+    top: -5%;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.674));
+}
+
+#total-visitors img {
+    border-radius: 9999px;
+}
+
+#header-arrow-down {
+    position: absolute;
+    bottom: 5%;
+    left: center;
+    width: 10%;
+    height: 20%;
+    border-radius: 2vw;
+    background-color: rgba(255, 255, 255, 0.162);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#header-arrow-down:hover {
+    box-shadow: 0px 0px 30px rgba(255, 255, 255, 0.123), inset 0px 0px 20px rgba(255, 255, 255, 0.429);
+    cursor: pointer;
+}
+
+#header-arrow-down img {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    margin: 0% 0 50% 0;
+    opacity: 0;
 }
