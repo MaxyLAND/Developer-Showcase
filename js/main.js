@@ -70,5 +70,5 @@ window.onload = function() {
 
 $(window).scroll(function() {
     var scrolledY = $(window).scrollTop();
-    $('body').css('background-position', 'center ' + (-scrolledY * 0.5) + 'px');
+    $('.background-shadow').css('background-position', 'center ' + (-scrolledY * 0.5) + 'px');
 });

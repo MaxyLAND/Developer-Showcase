@@ -1,7 +1,6 @@
 <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 720" width="720" height="720">
-	<title>Proyecto nuevo</title>
 	<style>
-		.s0 { fill: #343434 } 
+		.s0 { fill: #2f2f2f } 
 	</style>
 	<path id="Background" class="s0" d="m360 0.3l360 360-360 360-360-360z"/>
 </svg>
