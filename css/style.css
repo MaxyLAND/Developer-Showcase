@@ -39,7 +39,6 @@ body div {
     z-index: -2;
     opacity: 0.8;
     filter: drop-shadow(0.6vw 0.6vw 1vw rgba(0, 0, 0));
-    transform: translate3d(0,0,0)
 }
 
 .static-gradient {
@@ -63,6 +62,12 @@ body div {
     pointer-events: none;
     opacity: 1;
     z-index: 1;
+
+    animation-name: dissapear-anim;
+    animation-duration: 2s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0.2s;
+    animation-fill-mode: forwards;
 }
 
 #header {
@@ -152,8 +157,9 @@ body div {
     mask: url(../img/logo/logo-m.svg) no-repeat center / contain;
 
     animation-name: logo-bright-anim;
-    animation-duration: 1.5s;
+    animation-duration: 1s;
     animation-timing-function: ease-out;
+    animation-delay: 0.55s;
 }
 
 #logo-l-bright {
@@ -170,8 +176,9 @@ body div {
     mask: url(../img/logo/logo-l.svg) no-repeat center / contain;
 
     animation-name: logo-bright-anim;
-    animation-duration: 1.5s;
+    animation-duration: 1s;
     animation-timing-function: ease-out;
+    animation-delay: 0.55s;
 }
 
 #logo-m-bright-anim {
@@ -182,7 +189,7 @@ body div {
     font-family: logo-font;
     position: absolute;
     height: 30%;
-    width: 75%;
+    width: 85%;
     right: 0;
     overflow-y: hidden;
 
@@ -196,6 +203,12 @@ body div {
 
     top: 50%;
     transform: translateY(-50%);
+
+    animation-name: logo-text-anim;
+    animation-duration: 0.8s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 1s;
+    animation-fill-mode: forwards;
 }
 
 #logo-text span {
@@ -209,7 +222,7 @@ body div {
     position: absolute;
     height: 10%;
     width: 70%;
-    right: 7%;
+    right: 10%;
     overflow-y: hidden;
 
     float: left;
@@ -224,6 +237,12 @@ body div {
 
     top: 60%;
     transform: translateY(-65%);
+
+    animation-name: logo-subtext-anim;
+    animation-duration: 0.6s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 1.4s;
+    animation-fill-mode: forwards;
 }
 
 #logo-subtext span {
@@ -237,8 +256,14 @@ body div {
 
 #total-visitors {
     position: absolute;
-    top: -5%;
+    top: -25%;
     filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.674));
+
+    animation-name: total-visitors-anim;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-delay: 2s;
+    animation-fill-mode: forwards;
 }
 
 #total-visitors img {
@@ -253,11 +278,19 @@ body div {
     height: 20%;
     border-radius: 2vw;
     background-color: rgba(255, 255, 255, 0.162);
+    opacity: 0;
+    user-select: none;
 
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+
+    animation-name: header-arrow-down-anim;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-delay: 2s;
+    animation-fill-mode: forwards;
 }
 
 #header-arrow-down:hover {
@@ -295,9 +328,6 @@ body div {
     0% {
         background-position-x: -20vw;
     }
-    50% {
-        background-position-x: -20vw;
-    }
 
     100% {
         background-position-x: 20vw;
@@ -328,6 +358,28 @@ body div {
     }
 }
 
+@keyframes logo-text-anim {
+    0% {
+        width: 85%;
+    }
+
+    100% {
+        width: 60%;
+    }
+}
+
+@keyframes logo-subtext-anim {
+    0% {
+        top: 60%;
+        opacity: 0
+    }
+
+    100% {
+        top: 65%;
+        opacity: 1
+    }
+}
+
 @keyframes arrow-down-anim {
     0% {
         margin: 0% 0 50% 0;
@@ -341,5 +393,40 @@ body div {
     100% {
         margin: 50% 0 0% 0;
         opacity: 0;
+    }
+}
+
+@keyframes total-visitors-anim {
+    0% {
+        top: -25%;
+    }
+
+    100% {
+        top: 3%;
+    }
+}
+
+@keyframes header-arrow-down-anim {
+    0% {
+        bottom: -40%;
+    }
+
+    60% {
+        opacity: 0;
+    }
+
+    100% {
+        bottom: 5%;
+        opacity: 1;
+    }
+}
+
+@keyframes dissapear-anim {
+    0% {
+        opacity: 1
+    }
+
+    100% {
+        opacity: 0
     }
 }
