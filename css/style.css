@@ -97,6 +97,12 @@ body div {
     flex-wrap: wrap;
     z-index: 3;
     filter: drop-shadow(10px 6px 4px #000000);
+
+    animation-name: logo-moveleft-anim;
+    animation-duration: 0.8s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0.8s;
+    animation-fill-mode: forwards;
 }
 
 #logo-l,
@@ -112,12 +118,24 @@ body div {
     background: linear-gradient(53deg, #23ebe9 26%, #67d45f 70%, #ebfa56 96%);
     -webkit-mask: url(../img/logo/logo-l.svg) no-repeat center / contain;
     mask: url(../img/logo/logo-l.svg) no-repeat center / contain;
+
+    animation-name: logo-zoom-anim;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0.1s;
+    animation-fill-mode: forwards;
 }
 
 #logo-m {
     background: linear-gradient(53deg, #23ebe9 26%, #67d45f 70%, #ebfa56 96%);
     -webkit-mask: url(../img/logo/logo-m.svg) no-repeat center / contain;
     mask: url(../img/logo/logo-m.svg) no-repeat center / contain;
+
+    animation-name: logo-zoom-anim;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0.2s;
+    animation-fill-mode: forwards;
 }
 
 #logo-m-bright {
@@ -132,6 +150,10 @@ body div {
     background-position-x: -20vw;
     -webkit-mask: url(../img/logo/logo-m.svg) no-repeat center / contain;
     mask: url(../img/logo/logo-m.svg) no-repeat center / contain;
+
+    animation-name: logo-bright-anim;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-out;
 }
 
 #logo-l-bright {
@@ -146,6 +168,14 @@ body div {
     background-position-x: -20vw;
     -webkit-mask: url(../img/logo/logo-l.svg) no-repeat center / contain;
     mask: url(../img/logo/logo-l.svg) no-repeat center / contain;
+
+    animation-name: logo-bright-anim;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-out;
+}
+
+#logo-m-bright-anim {
+    background-position-x: 20vw;
 }
 
 #logo-text {
@@ -219,7 +249,7 @@ body div {
     position: absolute;
     bottom: 5%;
     left: center;
-    width: 10%;
+    width: 20vh;
     height: 20%;
     border-radius: 2vw;
     background-color: rgba(255, 255, 255, 0.162);
@@ -241,4 +271,75 @@ body div {
     height: 50%;
     margin: 0% 0 50% 0;
     opacity: 0;
+}
+
+#header-arrow-down-1 {
+    animation-name: arrow-down-anim;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-delay: 1.7s;
+    animation-iteration-count: infinite;
+    animation-fill-mode: forwards;
+}
+
+#header-arrow-down-2 {
+    animation-name: arrow-down-anim;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-delay: 2.2s;
+    animation-iteration-count: infinite;
+    animation-fill-mode: forwards;
+}
+
+@keyframes logo-bright-anim {
+    0% {
+        background-position-x: -20vw;
+    }
+    50% {
+        background-position-x: -20vw;
+    }
+
+    100% {
+        background-position-x: 20vw;
+    }
+}
+
+@keyframes logo-zoom-anim {
+    0% {
+        width: 75%;
+        height: 75%;
+        opacity: 0;
+    }
+
+    100% {
+        width: 100%;
+        height: 100%;
+        opacity: 1;
+    }
+}
+
+@keyframes logo-moveleft-anim {
+    0% {
+        width: 5% 0 0 30%;
+    }
+
+    100% {
+        margin: 5% 0 0 5%;
+    }
+}
+
+@keyframes arrow-down-anim {
+    0% {
+        margin: 0% 0 50% 0;
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    100% {
+        margin: 50% 0 0% 0;
+        opacity: 0;
+    }
 }
