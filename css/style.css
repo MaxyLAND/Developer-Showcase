@@ -66,7 +66,7 @@ body div {
     animation-name: dissapear-anim;
     animation-duration: 2s;
     animation-timing-function: ease-in-out;
-    animation-delay: 0.2s;
+    animation-delay: 0.7s;
     animation-fill-mode: forwards;
 }
 
@@ -106,7 +106,7 @@ body div {
     animation-name: logo-moveleft-anim;
     animation-duration: 0.8s;
     animation-timing-function: ease-in-out;
-    animation-delay: 0.8s;
+    animation-delay: 1.3s;
     animation-fill-mode: forwards;
 }
 
@@ -127,7 +127,7 @@ body div {
     animation-name: logo-zoom-anim;
     animation-duration: 0.5s;
     animation-timing-function: ease-in-out;
-    animation-delay: 0.1s;
+    animation-delay: 0.6s;
     animation-fill-mode: forwards;
 }
 
@@ -139,7 +139,7 @@ body div {
     animation-name: logo-zoom-anim;
     animation-duration: 0.5s;
     animation-timing-function: ease-in-out;
-    animation-delay: 0.2s;
+    animation-delay: 0.8s;
     animation-fill-mode: forwards;
 }
 
@@ -159,7 +159,7 @@ body div {
     animation-name: logo-bright-anim;
     animation-duration: 1s;
     animation-timing-function: ease-out;
-    animation-delay: 0.55s;
+    animation-delay: 1.05s;
 }
 
 #logo-l-bright {
@@ -178,7 +178,7 @@ body div {
     animation-name: logo-bright-anim;
     animation-duration: 1s;
     animation-timing-function: ease-out;
-    animation-delay: 0.55s;
+    animation-delay: 1.05s;
 }
 
 #logo-m-bright-anim {
@@ -207,7 +207,7 @@ body div {
     animation-name: logo-text-anim;
     animation-duration: 0.8s;
     animation-timing-function: ease-in-out;
-    animation-delay: 1s;
+    animation-delay: 1.5s;
     animation-fill-mode: forwards;
 }
 
@@ -241,7 +241,7 @@ body div {
     animation-name: logo-subtext-anim;
     animation-duration: 0.6s;
     animation-timing-function: ease-in-out;
-    animation-delay: 1.4s;
+    animation-delay: 1.9s;
     animation-fill-mode: forwards;
 }
 
@@ -262,7 +262,7 @@ body div {
     animation-name: total-visitors-anim;
     animation-duration: 1s;
     animation-timing-function: ease-out;
-    animation-delay: 2s;
+    animation-delay: 2.5s;
     animation-fill-mode: forwards;
 }
 
@@ -289,7 +289,7 @@ body div {
     animation-name: header-arrow-down-anim;
     animation-duration: 1s;
     animation-timing-function: ease-out;
-    animation-delay: 2s;
+    animation-delay: 2.5s;
     animation-fill-mode: forwards;
 }
 
@@ -310,7 +310,7 @@ body div {
     animation-name: arrow-down-anim;
     animation-duration: 1s;
     animation-timing-function: ease-out;
-    animation-delay: 1.7s;
+    animation-delay: 2.2s;
     animation-iteration-count: infinite;
     animation-fill-mode: forwards;
 }
@@ -319,7 +319,7 @@ body div {
     animation-name: arrow-down-anim;
     animation-duration: 1s;
     animation-timing-function: ease-out;
-    animation-delay: 2.2s;
+    animation-delay: 2.7s;
     animation-iteration-count: infinite;
     animation-fill-mode: forwards;
 }

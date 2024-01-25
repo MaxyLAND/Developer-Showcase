@@ -1,7 +1,7 @@
 window.onload = function() { 
 
     $("#logo-text span").each(function(index) {
-        $(this).delay(1400 + 80 * -index).animate({ opacity: 1 }, 800);
+        $(this).delay(1900 + 80 * -index).animate({ opacity: 1 }, 800);
     });
 }
 
