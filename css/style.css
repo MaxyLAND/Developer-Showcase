@@ -31,8 +31,8 @@ body div {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url(../img/square.svg);
-    background-size: 45vh;
+    background-image: url(../img/background.png);
+    background-size: 100%;
     background-repeat: repeat;
     background-position-x: center;
     background-attachment: fixed;
