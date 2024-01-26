@@ -139,7 +139,7 @@ body div {
     animation-name: logo-zoom-anim;
     animation-duration: 0.5s;
     animation-timing-function: ease-in-out;
-    animation-delay: 0.8s;
+    animation-delay: 0.7s;
     animation-fill-mode: forwards;
 }
 
@@ -295,6 +295,13 @@ body div {
 
 #header-arrow-down:hover {
     box-shadow: 0px 0px 30px rgba(255, 255, 255, 0.123), inset 0px 0px 20px rgba(255, 255, 255, 0.429);
+    cursor: pointer;
+    transition: 0.05s;
+}
+
+#header-arrow-down:active {
+    background-color: rgba(255, 255, 255, 0.417);
+    box-shadow: 0px 0px 50px rgba(255, 255, 255, 0.404), inset 0px 0px 20px rgba(255, 255, 255, 0.478);
     cursor: pointer;
 }
 
