@@ -215,6 +215,43 @@ body div {
     font-size: 6.5vw;
     color: white;
     opacity: 0;
+
+    animation-name: logo-text-letter-anim;
+    animation-duration: 0.8s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+.logo-text-d {
+    animation-delay: 1.44s;
+}
+
+.logo-text-n {
+    animation-delay: 1.52s;
+}
+
+.logo-text-aa {
+    animation-delay: 1.6s;
+}
+
+.logo-text-l {
+    animation-delay: 1.68s;
+}
+
+.logo-text-y {
+    animation-delay: 1.76s;
+}
+
+.logo-text-x {
+    animation-delay: 1.84s;
+}
+
+.logo-text-a {
+    animation-delay: 1.92s;
+}
+
+.logo-text-m {
+    animation-delay: 2s;
 }
 
 #logo-subtext {
@@ -372,6 +409,15 @@ body div {
 
     100% {
         width: 60%;
+    }
+}
+
+@keyframes logo-text-letter-anim {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
     }
 }
 
