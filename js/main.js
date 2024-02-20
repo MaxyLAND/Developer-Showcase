@@ -1,11 +1,14 @@
 window.onload = function() { 
-
-    /*$("#logo-text span").each(function(index) {
-        $(this).delay(1900 + 80 * -index).animate({ opacity: 1 }, 800);
-    });*/
+    document.getElementById("header-arrow-down").onclick = function() {
+        $.scrollify.next("section");
+    }
 }
 
-/*$(window).scroll(function() {
-    var scrolledY = $(window).scrollTop();
-    $('.background-shadow').css('background-position-y', (-scrolledY * 0.5) + 'px');
-});*/
+window.onload = function() { 
+    $.scrollify({
+        section: ".section", // Clase de las secciones
+        scrollSpeed: 800, // Velocidad de desplazamiento
+        setHeights: false, // Evita que Scrollify ajuste la altura de las secciones
+        updateHash: false, // Evita que Scrollify actualice el hash de la URL
+    });
+}
