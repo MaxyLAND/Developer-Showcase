@@ -1,0 +1,32 @@
+.section-container {
+    width: 100%;
+    height: 120vh;
+    float: left;
+}
+
+.section-styles {
+    width: 100%;
+    height: 100vh;
+    margin-top: 10vh;
+    float: left;
+}
+
+.red {
+    background-color: red;
+}
+
+.blue {
+    background-color: blue;
+}
+
+.green {
+    background-color: green;
+}
+
+.yellow {
+    background-color: yellow;
+}
+
+.black_ {
+    background-color: rgba(0, 0, 0, 0.387);
+}
