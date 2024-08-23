@@ -1,0 +1,40 @@
+* {
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    box-sizing: border-box;
+}
+
+*::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    margin: 0;
+    height: 100%;
+    background-color: #030712;
+}
+
+#glow-gradient {
+    position: absolute;
+    z-index: -10;
+    width: 100%;
+    height: 5000px;
+    background: radial-gradient(circle at center, #1D203B, transparent 80%);
+    top: -2750px;
+}
+
+.section-container {
+    width: 100%;
+    height: 120vh;
+    float: left;
+}
+
+.section-styles {
+    width: 100%;
+    height: 100vh;
+    margin-top: 10vh;
+    float: left;
+}
