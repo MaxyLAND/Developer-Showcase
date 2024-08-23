@@ -1,8 +1,10 @@
-
-
 @font-face {
     font-family: logo-font;
     src: url(./fonts/BakbakOne-Regular.ttf);
+}
+
+.logo-font {
+    font-family: logo-font;
 }
 
 .static-gradient {
@@ -85,8 +87,8 @@
 
 #logo-l {
     background: linear-gradient(53deg, #23ebe9 26%, #67d45f 70%, #ebfa56 96%);
-    -webkit-mask: url(../img/logo/logo-l.svg) no-repeat center / contain;
-    mask: url(../img/logo/logo-l.svg) no-repeat center / contain;
+    -webkit-mask: url(../img/logo-l.svg) no-repeat center / contain;
+    mask: url(../img/logo-l.svg) no-repeat center / contain;
 
     animation-name: logo-zoom-anim;
     animation-duration: 0.5s;
@@ -97,8 +99,8 @@
 
 #logo-m {
     background: linear-gradient(53deg, #23ebe9 26%, #67d45f 70%, #ebfa56 96%);
-    -webkit-mask: url(../img/logo/logo-m.svg) no-repeat center / contain;
-    mask: url(../img/logo/logo-m.svg) no-repeat center / contain;
+    -webkit-mask: url(../img/logo-m.svg) no-repeat center / contain;
+    mask: url(../img/logo-m.svg) no-repeat center / contain;
 
     animation-name: logo-zoom-anim;
     animation-duration: 0.5s;
@@ -117,8 +119,8 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-position-x: -20vw;
-    -webkit-mask: url(../img/logo/logo-m.svg) no-repeat center / contain;
-    mask: url(../img/logo/logo-m.svg) no-repeat center / contain;
+    -webkit-mask: url(../img/logo-m.svg) no-repeat center / contain;
+    mask: url(../img/logo-m.svg) no-repeat center / contain;
 
     animation-name: logo-bright-anim;
     animation-duration: 1s;
@@ -127,17 +129,16 @@
 }
 
 #logo-m-bright {
-    -webkit-mask: url(../img/logo/logo-m.svg) no-repeat center / contain;
-    mask: url(../img/logo/logo-m.svg) no-repeat center / contain;
+    -webkit-mask: url(../img/logo-m.svg) no-repeat center / contain;
+    mask: url(../img/logo-m.svg) no-repeat center / contain;
 }
 
 #logo-l-bright {
-    -webkit-mask: url(../img/logo/logo-l.svg) no-repeat center / contain;
-    mask: url(../img/logo/logo-l.svg) no-repeat center / contain;
+    -webkit-mask: url(../img/logo-l.svg) no-repeat center / contain;
+    mask: url(../img/logo-l.svg) no-repeat center / contain;
 }
 
 #logo-text {
-    font-family: logo-font;
     position: absolute;
     height: 30%;
     width: 85%;
@@ -206,7 +207,6 @@
 }
 
 #logo-subtext {
-    font-family: logo-font;
     position: absolute;
     height: 10%;
     width: 70%;
@@ -240,18 +240,6 @@
 #logo-subtext-small {
     font-size: 1.2vw;
     color: white;
-}
-
-#total-visitors {
-    position: absolute;
-    top: -25%;
-    filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.5));
-
-    animation-name: total-visitors-anim;
-    animation-duration: 1s;
-    animation-timing-function: ease-out;
-    animation-delay: 2.5s;
-    animation-fill-mode: forwards;
 }
 
 #total-visitors img {
@@ -320,16 +308,6 @@
     100% {
         top: 65%;
         opacity: 1
-    }
-}
-
-@keyframes total-visitors-anim {
-    0% {
-        top: -25%;
-    }
-
-    100% {
-        top: 3%;
     }
 }
 
