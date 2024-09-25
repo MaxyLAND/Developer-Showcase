@@ -70,12 +70,12 @@ document.addEventListener('scroll', function() {
         mostVisibleElement = sections[sections.length - 1];
     }
     else {
+        const centerY = window.innerHeight / 2;
         sections.forEach(section => {
             const rect = section.getBoundingClientRect();
-            const visibleHeight = Math.min(rect.bottom, window.innerHeight - 50) - Math.max(rect.top, 50);
-
-            if (visibleHeight > maxVisibleHeight && visibleHeight > 0) {
-                maxVisibleHeight = visibleHeight;
+            const isInView = rect.top <= centerY && rect.bottom >= centerY;
+    
+            if (isInView) {
                 mostVisibleElement = section;
             }
         });
