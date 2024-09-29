@@ -252,7 +252,7 @@ body {
     flex: 1; /* Permite que el contenedor de imagen se ajuste */
     height: 100%;
     padding: 20px 50px;
-    background-color: rgba(0, 0, 255, 0.115);
+    /*background-color: rgba(0, 0, 255, 0.115);*/
 }
 
 .project-container-text h3 {
@@ -286,11 +286,11 @@ body {
 
 .project-container-img-right-selector {
     left: -10px;
-    background: linear-gradient(90deg, #ffffff00 0%, #ffffff20 20%, #ffffff00 100%);
+    background: linear-gradient(90deg, #ffffff00 0%, #ffffff0d 20%, #10080800 100%);
 }
 .project-container-img-left-selector {
     right: -10px;
-    background: linear-gradient(90deg, #ffffff00 0%, #ffffff20 80%, #ffffff00 100%);
+    background: linear-gradient(90deg, #ffffff00 0%, #ffffff0d 80%, #ffffff00 100%);
 }
 
 .project-container-img-left-selector box-icon,
@@ -307,10 +307,10 @@ body {
 }
 
 .project-container-img-left-selector:hover {
-    background: linear-gradient(90deg, #ffffff00 0%, #ffffff43 80%, #ffffff00 100%);
+    background: linear-gradient(90deg, #ffffff00 0%, #ffffff2b 80%, #ffffff00 100%);
 }
 .project-container-img-right-selector:hover {
-    background: linear-gradient(90deg, #ffffff00 0%, #ffffff43 20%, #ffffff00 100%);
+    background: linear-gradient(90deg, #ffffff00 0%, #ffffff2b 20%, #ffffff00 100%);
 }
 
 .project-container-img-left-selector:hover box-icon,
@@ -324,9 +324,7 @@ body {
     left: 5%;
     width: 90%;
     height: 90%;
-    background-color: green;
     border-radius: 5px;
-    box-shadow: 0 10px 20px 5px rgba(0, 0, 0, 0.6);
     overflow: hidden;
 }
 
@@ -338,13 +336,13 @@ body {
     height: 100%;
     display: flex;
     transition: transform 0.33s;
-    background-color: rgb(234, 255, 0);
 }
 
-.project-container-img-slider img {
+.project-container-img-slider img,
+.project-container-img-slider video {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
 }
 /* FOOTER */
 

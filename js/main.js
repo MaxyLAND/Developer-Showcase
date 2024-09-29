@@ -11,6 +11,7 @@ window.onload = function() {
     document.getElementById("header-contact-item").addEventListener("click", function() {
         scrollToSection('contact');
     });
+    ScrollSlider(sl_dobuletrip_01, "sl_dobuletrip_01", -1);
 }
 
 document.addEventListener('scroll', function() {
@@ -119,13 +120,14 @@ function scrollToSection(sectionId) {
 }
 
 const sl_dobuletrip_01 = [
-    "./img/projects/example01.png",
-    "./img/projects/example02.png",
-    "./img/projects/example03.png"
+    "https://raw.githubusercontent.com/MaxyLAND/repo-sources/refs/heads/main/maxyland-games/portfolio/doubletrip/letters_with_cloud.png",
+    "https://raw.githubusercontent.com/MaxyLAND/repo-sources/refs/heads/main/maxyland-games/portfolio/doubletrip/level_example.png",
+    "https://raw.githubusercontent.com/MaxyLAND/repo-sources/refs/heads/main/maxyland-games/portfolio/doubletrip/map_example.png",
+    "https://raw.githubusercontent.com/MaxyLAND/repo-sources/refs/heads/main/maxyland-games/portfolio/doubletrip/small_gameplay.webm"
 ];
 
 var sl_selected = {
-    "sl_dobuletrip_01": 0
+    "sl_dobuletrip_01": 1
 };
 var delay = false;
 
@@ -172,17 +174,17 @@ function ScrollSlider (slider, sliderId, addition) {
         sliderCont.children[0].style.cssText = 'transition: none; transform: translateX(0%);';
         sliderCont.children[1].style.cssText = 'transition: none; transform: translateX(-100%);';
         sliderCont.children[2].style.cssText = 'transition: none; transform: translateX(-200%);';
-        sliderCont.children[0].innerHTML = '<img src="' + slider[prev] + '">';
-        sliderCont.children[1].innerHTML = '<img src="' + slider[sl_selected[sliderId]] + '">';
-        sliderCont.children[2].innerHTML = '<img src="' + slider[next] + '">';
+        SetSource(sliderCont.children[0], slider[prev]);
+        SetSource(sliderCont.children[1], slider[sl_selected[sliderId]]);
+        SetSource(sliderCont.children[2], slider[next]);
     }
     else { //go right
         sliderCont.children[0].style.cssText = 'transition: none; transform: translateX(200%);';
         sliderCont.children[1].style.cssText = 'transition: none; transform: translateX(100%);';
         sliderCont.children[2].style.cssText = 'transition: none; transform: translateX(0%);';
-        sliderCont.children[0].innerHTML = '<img src="' + slider[next] + '">';
-        sliderCont.children[1].innerHTML = '<img src="' + slider[sl_selected[sliderId]] + '">';
-        sliderCont.children[2].innerHTML = '<img src="' + slider[prev] + '">';
+        SetSource(sliderCont.children[0], slider[next]);
+        SetSource(sliderCont.children[1], slider[sl_selected[sliderId]]);
+        SetSource(sliderCont.children[2], slider[prev]);
     }
 
     setTimeout(function() {
@@ -195,4 +197,14 @@ function ScrollSlider (slider, sliderId, addition) {
     setTimeout(function() {
         delay = false;
     }, 330);
+}
+
+function SetSource(item, source) {
+    console.log(source);
+    if (source.includes(".webm")) {
+        item.innerHTML = '<video autoplay loop muted><source src="' + source + '" type="video/webm"></video>';
+    }
+    else {
+        item.innerHTML = '<img src="' + source + '">';
+    }
 }
