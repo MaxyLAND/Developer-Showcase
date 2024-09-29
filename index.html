@@ -81,6 +81,9 @@
                 </div>
                 <div class="project-row">
                     <div class="project-container-text project-right">
+                        <h3>
+                            Description
+                        </h3>
                         <span>Textazo Textazo Textazo Textazo Textazo Textazo Textazo Textazo Textazo Textazo Textazo Textazo 
                             Textazo Textazo Textazo Textazo Textazo Textazo Textazo Textazo Textazo Textazo Textazo Textazo 
                             Textazo Textazo Textazo Textazo Textazo Textazo Textazo Textazo Textazo Textazo Textazo Textazo 
@@ -88,19 +91,21 @@
                         </span>
                     </div>
                     <div class="project-container-img project-left">
-                        <div class="project-container-img-previous">
-                            <img src="./img/projects/example01.png">
+                        <div id="sl_dobuletrip_01" class="project-container-img-container">
+                            <div class="project-container-img-slider">
+                                <img src="./img/projects/example01.png" alt="">
+                            </div>
+                            <div class="project-container-img-slider" style="transform: translateX(100%);">
+                                <img src="./img/projects/example02.png" alt="">
+                            </div>
+                            <div class="project-container-img-slider" style="transform: translateX(-100%);">
+                                <img src="./img/projects/example03.png" alt="">
+                            </div>
                         </div>
-                        <div class="project-container-img-next">
-                            <img src="./img/projects/example02.png">
-                        </div>
-                        <div class="project-container-img-top">
-                            <img src="./img/projects/example03.png">
-                        </div>
-                        <div class="project-container-img-right-selector">
+                        <div class="project-container-img-right-selector" onclick="ScrollSlider(sl_dobuletrip_01, 'sl_dobuletrip_01', -1)">
                             <box-icon name='chevron-left'></box-icon>
                         </div>
-                        <div class="project-container-img-left-selector">
+                        <div class="project-container-img-left-selector" onclick="ScrollSlider(sl_dobuletrip_01, 'sl_dobuletrip_01', 1)">
                             <box-icon name='chevron-right'></box-icon>
                         </div>
                     </div>                   

@@ -117,3 +117,82 @@ function scrollToSection(sectionId) {
     const section = document.getElementById(sectionId);
     section.scrollIntoView({ behavior: 'smooth' });
 }
+
+const sl_dobuletrip_01 = [
+    "./img/projects/example01.png",
+    "./img/projects/example02.png",
+    "./img/projects/example03.png"
+];
+
+var sl_selected = {
+    "sl_dobuletrip_01": 0
+};
+var delay = false;
+
+function ScrollSlider (slider, sliderId, addition) {
+    if (delay) {
+        return;
+    }
+
+    sl_selected[sliderId] += addition;
+    if (sl_selected[sliderId] < 0) {
+        sl_selected[sliderId] = slider.length - 1;
+    }
+    else if (sl_selected[sliderId] >= slider.length) {
+        sl_selected[sliderId] = 0;
+    }
+
+    var next = sl_selected[sliderId];
+    var prev = sl_selected[sliderId];
+    if (addition > 0) {
+        next++;
+        if (next >= slider.length) {
+            next = 0;
+        }
+        prev--;
+        if (prev < 0) {
+            prev = slider.length - 1;
+        }
+    }
+    else {
+        next--;
+        if (next < 0) {
+            next = slider.length - 1;
+        }
+        prev++;
+        if (prev >= slider.length) {
+            prev = 0;
+        }
+    }
+
+    console.log("prev: " + prev + " selected: " + sl_selected[sliderId] + " next: " + next);
+
+    var sliderCont = document.getElementById(sliderId);
+    if (addition < 0) { //go left
+        sliderCont.children[0].style.cssText = 'transition: none; transform: translateX(0%);';
+        sliderCont.children[1].style.cssText = 'transition: none; transform: translateX(-100%);';
+        sliderCont.children[2].style.cssText = 'transition: none; transform: translateX(-200%);';
+        sliderCont.children[0].innerHTML = '<img src="' + slider[prev] + '">';
+        sliderCont.children[1].innerHTML = '<img src="' + slider[sl_selected[sliderId]] + '">';
+        sliderCont.children[2].innerHTML = '<img src="' + slider[next] + '">';
+    }
+    else { //go right
+        sliderCont.children[0].style.cssText = 'transition: none; transform: translateX(200%);';
+        sliderCont.children[1].style.cssText = 'transition: none; transform: translateX(100%);';
+        sliderCont.children[2].style.cssText = 'transition: none; transform: translateX(0%);';
+        sliderCont.children[0].innerHTML = '<img src="' + slider[next] + '">';
+        sliderCont.children[1].innerHTML = '<img src="' + slider[sl_selected[sliderId]] + '">';
+        sliderCont.children[2].innerHTML = '<img src="' + slider[prev] + '">';
+    }
+
+    setTimeout(function() {
+        sliderCont.children[0].style.cssText = 'transform: translateX(100%);';
+        sliderCont.children[1].style.cssText = 'transform: translateX(0%);';
+        sliderCont.children[2].style.cssText = 'transform: translateX(-100%);';
+        delay = true;
+    }, 1);
+
+    setTimeout(function() {
+        delay = false;
+    }, 330);
+}
