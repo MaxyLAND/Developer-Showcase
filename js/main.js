@@ -11,7 +11,17 @@ window.onload = function() {
     document.getElementById("header-contact-item").addEventListener("click", function() {
         scrollToSection('contact');
     });
+    CreateSliderPoints(sl_dobuletrip_01, "sl_dobuletrip_01_points");
     ScrollSlider(sl_dobuletrip_01, "sl_dobuletrip_01", -1);
+
+    document.querySelector('.image-detail-content').addEventListener('click', function(event) {
+        event.stopPropagation();
+    });
+
+    //loop every 5 secs
+    setInterval(function() {
+        ScrollSlider(sl_dobuletrip_01, "sl_dobuletrip_01", 1);
+    }, 3000);
 }
 
 document.addEventListener('scroll', function() {
@@ -120,19 +130,45 @@ function scrollToSection(sectionId) {
 }
 
 const sl_dobuletrip_01 = [
-    "https://raw.githubusercontent.com/MaxyLAND/repo-sources/refs/heads/main/maxyland-games/portfolio/doubletrip/letters_with_cloud.png",
-    "https://raw.githubusercontent.com/MaxyLAND/repo-sources/refs/heads/main/maxyland-games/portfolio/doubletrip/level_example.png",
-    "https://raw.githubusercontent.com/MaxyLAND/repo-sources/refs/heads/main/maxyland-games/portfolio/doubletrip/map_example.png",
-    "https://raw.githubusercontent.com/MaxyLAND/repo-sources/refs/heads/main/maxyland-games/portfolio/doubletrip/small_gameplay.webm"
+    {
+        "source": "https://raw.githubusercontent.com/MaxyLAND/repo-sources/refs/heads/main/maxyland-games/portfolio/doubletrip/letters_with_cloud.png",
+        "alter": "Double Trip final logo",
+        "description": "Double Trip final logo",
+        "type": "image",
+        "styles": "object-fit: contain;"
+    },
+    {
+        "source": "https://raw.githubusercontent.com/MaxyLAND/repo-sources/refs/heads/main/maxyland-games/portfolio/doubletrip/level_example.png",
+        "alter": "Double Trip level example",
+        "description": "Double Trip level example",
+        "type": "image",
+        "styles": ""
+    },
+    {
+        "source": "https://raw.githubusercontent.com/MaxyLAND/repo-sources/refs/heads/main/maxyland-games/portfolio/doubletrip/map_example.png",
+        "alter": "Double Trip map example",
+        "description": "Double Trip map example",
+        "type": "image",
+        "styles": ""
+    },
+    {
+        "source": "https://raw.githubusercontent.com/MaxyLAND/repo-sources/refs/heads/main/maxyland-games/portfolio/doubletrip/small_gameplay.webm",
+        "alter": "Double Trip gameplay",
+        "description": "Double Trip gameplay",
+        "type": "video",
+        "styles": ""
+    }
 ];
 
 var sl_selected = {
     "sl_dobuletrip_01": 1
 };
-var delay = false;
+var sl_delay = {
+    "sl_dobuletrip_01": false
+};
 
 function ScrollSlider (slider, sliderId, addition) {
-    if (delay) {
+    if (sl_delay[sliderId]) {
         return;
     }
 
@@ -191,20 +227,49 @@ function ScrollSlider (slider, sliderId, addition) {
         sliderCont.children[0].style.cssText = 'transform: translateX(100%);';
         sliderCont.children[1].style.cssText = 'transform: translateX(0%);';
         sliderCont.children[2].style.cssText = 'transform: translateX(-100%);';
-        delay = true;
-    }, 1);
+        sl_delay[sliderId] = true;
+    }, 5);
 
+    SetActiveSliderPoint(slider, sliderId, sliderId + "_points");
     setTimeout(function() {
-        delay = false;
-    }, 330);
+        sl_delay[sliderId] = false;
+    }, 335);
 }
 
 function SetSource(item, source) {
-    console.log(source);
-    if (source.includes(".webm")) {
-        item.innerHTML = '<video autoplay loop muted><source src="' + source + '" type="video/webm"></video>';
+    if (source.type === "video") {
+        item.innerHTML = '<video style="'+source.styles+'" autoplay loop muted><source src="' + source.source + '" type="video/webm"></video>';
     }
-    else {
-        item.innerHTML = '<img src="' + source + '">';
+    else if (source.type === "image") {
+        item.innerHTML = '<img style="'+source.styles+'" src="' + source.source + '">';
     }
+}
+
+function SetActiveSliderPoint(slider, sliderId, pointsId) {
+    var sliderPoints = document.getElementById(pointsId);
+    for (var i = 0; i < slider.length; i++) {
+        sliderPoints.children[i].classList.remove("slider-point-active");
+    }
+    sliderPoints.children[sl_selected[sliderId]].classList.add("slider-point-active");
+}
+
+function CreateSliderPoints(slider, pointsId) {
+    const sliderCont = document.getElementById(pointsId);
+    var newContent = "";
+    for (var i = 0; i < slider.length; i++) {
+        newContent += `
+        <div class="slider-point" onclick="SetSliderPoint(' + i + ', sl_dobuletrip_01, \'sl_dobuletrip_01\')">
+            <div></div>
+        </div>
+        `;
+    }
+    sliderCont.innerHTML = newContent;
+}
+
+function OpenImageDetail(slider, sliderId) {
+    document.getElementById("image-detail-container").style.display = "block";
+}
+
+function CloseImageDetail() {
+    document.getElementById("image-detail-container").style.display = "none";
 }

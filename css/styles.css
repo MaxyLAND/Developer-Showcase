@@ -242,17 +242,17 @@ body {
 }
 
 .project-container-img {
-    flex: 0 0 500px; /* Permite que el contenedor de imagen se ajuste */
+    flex: 0 0 500px;
     height: 100%;
     position: relative;
     overflow: visible;
 }
 
 .project-container-text {
-    flex: 1; /* Permite que el contenedor de imagen se ajuste */
+    flex: 1;
     height: 100%;
     padding: 20px 50px;
-    /*background-color: rgba(0, 0, 255, 0.115);*/
+    background-color: rgba(0, 0, 255, 0.115);
 }
 
 .project-container-text h3 {
@@ -275,57 +275,15 @@ body {
     order: 1;
 }
 
-.project-container-img-right-selector,
-.project-container-img-left-selector {
-    position: absolute;
-    top: 5%;
-    width: 150px;
-    height: 90%;
-    cursor: pointer;
-}
-
-.project-container-img-right-selector {
-    left: -10px;
-    background: linear-gradient(90deg, #ffffff00 0%, #ffffff0d 20%, #10080800 100%);
-}
-.project-container-img-left-selector {
-    right: -10px;
-    background: linear-gradient(90deg, #ffffff00 0%, #ffffff0d 80%, #ffffff00 100%);
-}
-
-.project-container-img-left-selector box-icon,
-.project-container-img-right-selector box-icon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    fill: transparent;
-    height: 120px;
-    width: 120px;
-    transition: fill 0.2s;
-    filter: drop-shadow(0px 0px 8px #000000);
-}
-
-.project-container-img-left-selector:hover {
-    background: linear-gradient(90deg, #ffffff00 0%, #ffffff2b 80%, #ffffff00 100%);
-}
-.project-container-img-right-selector:hover {
-    background: linear-gradient(90deg, #ffffff00 0%, #ffffff2b 20%, #ffffff00 100%);
-}
-
-.project-container-img-left-selector:hover box-icon,
-.project-container-img-right-selector:hover box-icon {
-    fill: white;
-}
-
 .project-container-img-container {
     position: absolute;
-    top: 5%;
+    top: 0px;
     left: 5%;
     width: 90%;
     height: 90%;
     border-radius: 5px;
     overflow: hidden;
+    transition: background-color 0.2s;
 }
 
 .project-container-img-slider {
@@ -336,14 +294,124 @@ body {
     height: 100%;
     display: flex;
     transition: transform 0.33s;
+    user-select: none;
 }
 
 .project-container-img-slider img,
 .project-container-img-slider video {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
+    user-select: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: transform 0.2s;
 }
+
+.project-container-img-slider:hover img,
+.project-container-img-slider:hover video {
+    transform: scale(0.9);
+}
+
+.project-container-img-container:hover {
+    background-color: rgba(255, 255, 255, 0.097);
+}
+
+.project-container-img-points {
+    width: 100%;
+    height: 10%;
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.slider-point {
+    width: 15px;
+    height: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slider-point div {
+    width: 66%;
+    height: 66%;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.548);
+    transition: background-color 0.33s, width 0.33s, height 0.33s;
+}
+
+.slider-point-active div {
+    background-color: white;
+    width: 100%;
+    height: 100%;
+}
+
+.project-container-img-controller-left,
+.project-container-img-controller-right {
+    position: absolute;
+    bottom: 0;
+    width: 20%;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.project-container-img-controller-left {
+    left: 0;
+}
+.project-container-img-controller-right {
+    right: 0;
+}
+
+.project-container-img-controller-left box-icon,
+.project-container-img-controller-right box-icon {
+    height: 35px;
+    width: 35px;
+    fill: rgba(255, 255, 255, 0.548);
+    transition: fill 0.2s, height 0.2s, width 0.2s, filter 0.2s;
+    filter: drop-shadow(0px 0px 0px black);
+}
+
+.project-container-img-controller-left:hover box-icon,
+.project-container-img-controller-right:hover box-icon {
+    fill: white;
+    height: 50px;
+    width: 50px;
+    filter: drop-shadow(0px 0px 8px black);
+}
+
+/* IMAGE DETAIL */
+#image-detail-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.579);
+    z-index: 1000;
+}
+
+.image-detail-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    background-color: rgb(0, 0, 0);
+    border-radius: 10px;
+    user-select: none;    
+}
+
 /* FOOTER */
 
 #footer {

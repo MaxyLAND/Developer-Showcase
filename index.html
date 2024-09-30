@@ -42,6 +42,12 @@
     <div class="banner-gradient"></div>
     <div class="banner-gradient-small"></div>
 
+    <div style="display: none;" id="image-detail-container" onclick="CloseImageDetail()">
+        <div class="image-detail-content">
+            
+        </div>
+    </div>
+
     <header id="header">
         <div class="logo-container">
             <div id="logo-logo">
@@ -91,16 +97,17 @@
                         </span>
                     </div>
                     <div class="project-container-img project-left">
-                        <div id="sl_dobuletrip_01" class="project-container-img-container">
+                        <div id="sl_dobuletrip_01_points" class="project-container-img-points"></div>
+                        <div class="project-container-img-controller-left" onclick="ScrollSlider(sl_dobuletrip_01, 'sl_dobuletrip_01', -1)">
+                            <box-icon name='chevron-left'></box-icon>
+                        </div>
+                        <div class="project-container-img-controller-right" onclick="ScrollSlider(sl_dobuletrip_01, 'sl_dobuletrip_01', 1)">
+                            <box-icon name='chevron-right'></box-icon>
+                        </div>
+                        <div id="sl_dobuletrip_01" class="project-container-img-container" onclick="OpenImageDetail(sl_dobuletrip_01, 'sl_dobuletrip_01')">
                             <div class="project-container-img-slider"></div>
                             <div class="project-container-img-slider" style="transform: translateX(100%);"></div>
                             <div class="project-container-img-slider" style="transform: translateX(-100%);"></div>
-                        </div>
-                        <div class="project-container-img-right-selector" onclick="ScrollSlider(sl_dobuletrip_01, 'sl_dobuletrip_01', -1)">
-                            <box-icon name='chevron-left'></box-icon>
-                        </div>
-                        <div class="project-container-img-left-selector" onclick="ScrollSlider(sl_dobuletrip_01, 'sl_dobuletrip_01', 1)">
-                            <box-icon name='chevron-right'></box-icon>
                         </div>
                     </div>                   
                 </div>
