@@ -18,9 +18,8 @@ window.onload = function() {
         event.stopPropagation();
     });
 
-    //loop every 5 secs
     setInterval(function() {
-        ScrollSlider(sl_dobuletrip_01, "sl_dobuletrip_01", 1);
+        ScrollSlider(sl_dobuletrip_01, "sl_dobuletrip_01", 1, false);
     }, 3000);
 }
 
@@ -126,7 +125,14 @@ document.addEventListener('scroll', function() {
 
 function scrollToSection(sectionId) {
     const section = document.getElementById(sectionId);
-    section.scrollIntoView({ behavior: 'smooth' });
+    const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+    const offset = window.scrollY <= 150 ? (0.3 * window.innerHeight) : 0;
+    const finalPosition = sectionTop - offset;
+    console.log(finalPosition);
+    window.scrollTo({
+        top: finalPosition,
+        behavior: 'smooth'
+    });
 }
 
 const sl_dobuletrip_01 = [
@@ -150,14 +156,14 @@ const sl_dobuletrip_01 = [
         "description": "Double Trip map example",
         "type": "image",
         "styles": ""
-    },
+    }/*,
     {
         "source": "https://raw.githubusercontent.com/MaxyLAND/repo-sources/refs/heads/main/maxyland-games/portfolio/doubletrip/small_gameplay.webm",
         "alter": "Double Trip gameplay",
         "description": "Double Trip gameplay",
         "type": "video",
         "styles": ""
-    }
+    }*/
 ];
 
 var sl_selected = {
@@ -166,11 +172,28 @@ var sl_selected = {
 var sl_delay = {
     "sl_dobuletrip_01": false
 };
+var sl_autoscroll = {
+    "sl_dobuletrip_01": true
+};
+var sl_timeout = {
+    "sl_dobuletrip_01": null
+};
 
-function ScrollSlider (slider, sliderId, addition) {
+function ScrollSlider (slider, sliderId, addition, clicked) {
     if (sl_delay[sliderId]) {
         return;
     }
+    if (clicked) {
+        sl_autoscroll[sliderId] = false;
+        if (sl_timeout[sliderId]) {
+            clearTimeout(sl_timeout[sliderId]);
+        }
+        sl_timeout[sliderId] = setTimeout(function() {
+            sl_autoscroll[sliderId] = true;
+        }, 10000);
+    }
+    else if (!sl_autoscroll[sliderId])
+        return;
 
     sl_selected[sliderId] += addition;
     if (sl_selected[sliderId] < 0) {
