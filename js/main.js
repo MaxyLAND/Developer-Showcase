@@ -25,6 +25,12 @@ window.onload = function() {
 
 document.addEventListener('scroll', function() {
 
+    const scrollProgressBar = document.getElementById('scroll-progress-bar');
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercent = (scrollTop / docHeight) * 100;
+    scrollProgressBar.style.width = scrollPercent + '%';
+
     //check scroll poss and modify the header
     const bannerLine = document.getElementsByClassName('banner-line')[0];
     const bannerGradient = document.getElementsByClassName('banner-gradient')[0];
@@ -51,13 +57,6 @@ document.addEventListener('scroll', function() {
         bannerLogo.classList.remove('scale-1-anim');
     }
 
-    const header = document.getElementById('header');
-    if (scrollPosition > 150) {
-        header.classList.add('header-small');
-    } else {
-        header.classList.remove('header-small');
-    }
-
 
     // Highlight the current section in the navigation bar
     const sections = document.querySelectorAll('.section');
@@ -69,7 +68,6 @@ document.addEventListener('scroll', function() {
     const highlightSvgKnowledge = document.getElementById('header-knowledge-svg');
     const highlightTextContact = document.getElementById('header-contact');
     const highlightSvgContact = document.getElementById('header-contact-svg');
-    let maxVisibleHeight = 0;
     let mostVisibleElement = null;
 
     if (scrollPosition === 0) {
@@ -125,9 +123,7 @@ document.addEventListener('scroll', function() {
 
 function scrollToSection(sectionId) {
     const section = document.getElementById(sectionId);
-    const sectionTop = section.getBoundingClientRect().top + window.scrollY;
-    const offset = window.scrollY <= 150 ? (0.3 * window.innerHeight) : 0;
-    const finalPosition = sectionTop - offset;
+    const finalPosition = section.getBoundingClientRect().top + window.scrollY;
     console.log(finalPosition);
     window.scrollTo({
         top: finalPosition,
@@ -290,7 +286,17 @@ function CreateSliderPoints(slider, pointsId) {
 }
 
 function OpenImageDetail(slider, sliderId) {
+    const src = slider[sl_selected[sliderId]];
+    console.log(src);
     document.getElementById("image-detail-container").style.display = "block";
+    if (src["type"] === "video") {
+        document.getElementById("image-detail-image").innerHTML = `<video autoplay controls loop><source src="${src["source"]}" type="video/webm"></video>`;
+    }
+    else {
+        document.getElementById("image-detail-image").innerHTML = `<img src="${src["source"]}" alt="${src["alter"]}">`;
+    }
+    document.getElementById("image-detail-title").innerHTML = `<span>${src["alter"]}</span>`;
+    document.getElementById("image-detail-description").innerHTML = `<span>${src["description"]}</span>`;
 }
 
 function CloseImageDetail() {
