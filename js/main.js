@@ -1,4 +1,16 @@
 window.onload = function() {
+
+    const url = new URL(window.location.href);
+    if (!url.searchParams.has('lng')) {
+        url.searchParams.set('lng', 'EN');
+        window.history.replaceState({}, '', url.href);
+    }
+    //get the language
+    const language = url.searchParams.get('lng');
+    if (language === 'ES') {
+        LanguageToES();
+    }
+
     document.getElementById("header-projects-item").addEventListener("click", function() {
         scrollToSection('projects');
     });
@@ -301,4 +313,45 @@ function OpenImageDetail(slider, sliderId) {
 
 function CloseImageDetail() {
     document.getElementById("image-detail-container").style.display = "none";
+}
+
+function AlterLanguages() {
+    const list = document.getElementsByClassName('banner-language-list')[0];
+    if (list.style.display === 'flex') {
+        list.style.display = 'none';
+    } else {
+        list.style.display = 'flex';
+    }
+}
+
+function ChangeLanguage(language) {
+    AlterLanguages();
+    
+    const url = new URL(window.location.href);
+    url.searchParams.set('lng', language);
+    window.location.href = url.href;
+}
+
+function LanguageToES() {
+    document.getElementById('logo-subtext').innerHTML = 
+    '<span class="logo-font">DESARROLLADOR WEB <span id="logo-subtext-small" class="logo-font">Y DE</span> VIDEOJUEGOS</span>';
+
+    document.getElementsByClassName('banner-content')[0].innerHTML = `
+        <div class="banner-item" id="header-projects-item">
+            <box-icon id="header-projects-svg" name='code-alt'></box-icon>
+            <span id="header-projects"> Proyectos</span>
+        </div>
+        <div class="banner-item" id="header-aboutme-item">
+            <box-icon id="header-aboutme-svg" name='user-check'></box-icon>
+            <span id="header-aboutme"> Sobre mí</span>
+        </div>
+        <div class="banner-item" id="header-knowledge-item">
+            <box-icon id="header-knowledge-svg" name='book'></box-icon>
+            <span id="header-knowledge"> Conocimiento</span>
+        </div>
+        <div class="banner-item" id="header-contact-item">
+            <box-icon id="header-contact-svg" name='envelope'></box-icon>
+            <span id="header-contact"> Contacto</span>
+        </div>
+    `;
 }

@@ -52,6 +52,7 @@ span a:hover {
     position: fixed;
     width: 100%;
     height: 60px;
+    overflow: visible;
 }
 
 .banner-line {
@@ -156,6 +157,74 @@ span a:hover {
     transform: scale(0);
 
     transition: transform 0.3s ease-in-out;
+}
+
+.banner-language {
+    position: absolute;
+    top: 0px;
+    right: 40px;
+    height: 60px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease-in-out;
+
+    transform: translateX(300%);
+    animation-name: go-left;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-out;
+    animation-delay: 2.2s;
+    animation-fill-mode: forwards;
+
+    cursor: pointer;
+}
+
+.banner-language box-icon {
+    height: 28px;
+    width: 28px;
+    fill: white;
+}
+
+.banner-language-list {
+    position: absolute;
+    top: 10px;
+    right: 40px;
+    height: fit-content;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    transition: transform 0.3s ease-in-out;
+    border-radius: 20px;
+    background-color: black;
+    padding-top: 40px;
+    overflow: visible;
+    gap: 10px;
+    padding-bottom: 6px;
+
+    cursor: pointer;
+}
+
+.banner-language-list div {
+    height: 32px;
+    width: 32px;
+    fill: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.banner-language-list div:hover {
+    background-color: rgba(255, 255, 255, 0.453);
+}
+
+.banner-language-list div svg {
+    height: 22px;
+    width: 22px;
 }
 
 /* SECTIONS */
@@ -549,6 +618,15 @@ span a:hover {
     }
 }
 
+@keyframes go-left {
+    0% {
+        transform: translateX(300%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
 /* RESPONSIVE */
 
 @media (max-width: 1500px) {
@@ -614,7 +692,7 @@ span a:hover {
     
     .center-items-anim {
         width: 80%;
-        margin-left: 20%;
+        margin-left: 10%;
     }
 
     .banner-logo {
