@@ -1,0 +1,160 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import Icon from './Icon.astro';
+import { type Locale, pathFor } from '../i18n/routes';
+import { t } from '../i18n/ui';
+import { profile } from '../data/profile';
+
+interface Props {
+  locale: Locale;
+  tools: CollectionEntry<'projects'>[];
+}
+
+const { locale, tools } = Astro.props;
+const ui = t(locale);
+const slotIcons = ['puzzle', 'wrench', 'gamepad'] as const;
+---
+
+<section class="tools wrap" id="tools" aria-labelledby="tools-title">
+  <h2 class="section-title" id="tools-title">{ui.tools.title}</h2>
+
+  {
+    tools.length > 0 ? (
+      <ul class="tools__grid">
+        {tools.map((tool) => (
+          <li>
+            <article class="tool panel">
+              <Image
+                class="tool__cover"
+                src={tool.data.cover}
+                alt={tool.data.coverAlt[locale]}
+                widths={[480, 800]}
+                sizes="(min-width: 48rem) 24rem, 100vw"
+                loading="lazy"
+              />
+              <div class="tool__body">
+                <span class="chip">{ui.projects.status[tool.data.status]}</span>
+                <h3 class="tool__title">{tool.data.title}</h3>
+                <p class="tool__summary">{tool.data.tagline[locale]}</p>
+                <a class="pill pill--secondary" href={pathFor({ page: 'project', slug: tool.id }, locale)}>
+                  {ui.projects.view(tool.data.title)}
+                  <Icon name="arrow-right" />
+                </a>
+              </div>
+            </article>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <div class="tools__empty panel">
+        <ul class="slots" aria-hidden="true">
+          {ui.tools.slots.map((label, i) => (
+            <li class="slot">
+              <Icon name={slotIcons[i]} size={26} />
+              <span>{label}</span>
+            </li>
+          ))}
+        </ul>
+        <div class="tools__note">
+          <p>{ui.tools.empty}</p>
+          <a class="pill pill--secondary" href={profile.links.github} target="_blank" rel="noopener">
+            <Icon name="github" />
+            {ui.tools.github}
+          </a>
+        </div>
+      </div>
+    )
+  }
+</section>
+
+<style>
+  .tools {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .tools__empty {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    align-items: center;
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    padding: clamp(1.25rem, 3vw, 2.25rem);
+    box-shadow: none;
+  }
+
+  /* Empty slots are scenery: dashed, dim, and never pressable. */
+  .slots {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .slot {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 0.6rem;
+    aspect-ratio: 4 / 3;
+    border: 1px dashed var(--line-2);
+    border-radius: var(--r-card);
+    color: var(--text-3);
+    font-size: var(--step--1);
+    background:
+      repeating-linear-gradient(
+        -37deg,
+        transparent 0 10px,
+        rgb(150 214 206 / 0.025) 10px 11px
+      );
+  }
+
+  .tools__note {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+  }
+
+  .tools__note p {
+    color: var(--text-2);
+    max-inline-size: 40ch;
+  }
+
+  .tools__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+    gap: 1rem;
+  }
+
+  .tool {
+    display: grid;
+    overflow: hidden;
+    block-size: 100%;
+  }
+
+  .tool__cover {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    inline-size: 100%;
+  }
+
+  .tool__body {
+    display: grid;
+    gap: 0.75rem;
+    justify-items: start;
+    padding: 1.25rem;
+  }
+
+  .tool__title {
+    font-size: var(--step-2);
+  }
+
+  .tool__summary {
+    color: var(--text-2);
+  }
+
+  @media (max-width: 47.99rem) {
+    .tools__empty {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,88 @@
+---
+/**
+ * A display title that assembles letter by letter the first time it scrolls
+ * into view, the way MAXYLAND does in the intro. Readable by default: the
+ * hidden starting state only exists once the script has armed it.
+ */
+interface Props {
+  text: string;
+  id?: string;
+  level?: 'h1' | 'h2' | 'h3';
+  class?: string;
+}
+
+const { text, id, level = 'h3', class: className = '' } = Astro.props;
+const Tag = level;
+const chars = [...text];
+---
+
+<Tag id={id} class={`assemble ${className}`} data-assemble>
+  <span class="sr-only">{text}</span>
+  <span class="assemble__chars" aria-hidden="true">
+    {chars.map((c, i) => (c === ' ' ? <span class="ch ch--space"> </span> : <span class="ch" style={`--i:${i}`}>{c}</span>))}
+  </span>
+</Tag>
+
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduce && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('is-in');
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { rootMargin: '0px 0px -12% 0px' },
+    );
+    document.querySelectorAll<HTMLElement>('[data-assemble]').forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.top < innerHeight * 0.88) return; // already on screen: leave it be
+      el.classList.add('is-armed');
+      io.observe(el);
+    });
+  }
+</script>
+
+<style>
+  .assemble {
+    font-size: var(--step-4);
+    line-height: 0.95;
+  }
+
+  .assemble__chars {
+    display: inline;
+  }
+
+  .ch {
+    display: inline-block;
+  }
+
+  .ch--space {
+    inline-size: 0.28em;
+  }
+
+  .is-armed .ch {
+    opacity: 0;
+  }
+
+  .is-armed.is-in .ch {
+    animation: ch-in 520ms var(--ease-out) both;
+    animation-delay: calc(var(--i) * 45ms);
+  }
+
+  @keyframes ch-in {
+    from {
+      opacity: 0;
+      transform: translateX(-0.3em);
+      filter: blur(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+  }
+</style>

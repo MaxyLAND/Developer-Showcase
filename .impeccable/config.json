@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "codex-grid-background",
+        "value": "*",
+        "files": [
+          "src/styles/global.css"
+        ],
+        "createdAt": "2026-09-28T15:05:35.228Z",
+        "reason": "Direction contract (Escena en el editor): the grid is the scene-view canvas; the user-approved direction card listed 'rejilla de escena muy tenue'"
+      }
+    ]
+  }
+}

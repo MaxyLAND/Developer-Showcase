@@ -1,0 +1,256 @@
+---
+/**
+ * The MaxyLAND lockup and its intro: the L and M pieces assemble the hexagon,
+ * a white shine sweeps across it, the mark slides aside and MAXYLAND emerges
+ * letter by letter with the slogan. Plays once per browser session; returning
+ * navigations render the settled lockup (see the head script in Base.astro).
+ */
+import '@fontsource/bakbak-one/latin-400.css';
+import type { Locale } from '../i18n/routes';
+
+interface Props {
+  locale: Locale;
+  /** Render as the page's h1. */
+  heading?: boolean;
+}
+
+const { locale, heading = false } = Astro.props;
+const Tag = heading ? 'h1' : 'div';
+
+// Brand letter ramp, taken from the original wordmark.
+const letters = [
+  ['M', '#3fefeb'],
+  ['A', '#87fbf4'],
+  ['X', '#a3fff4'],
+  ['Y', '#b4ffd4'],
+  ['L', '#beffc2'],
+  ['A', '#caffb7'],
+  ['N', '#f0fe9a'],
+  ['D', '#fcfc89'],
+] as const;
+
+const slogan =
+  locale === 'es'
+    ? { a: 'Desarrollador web', joint: 'y de', b: 'videojuegos' }
+    : { a: 'Web designer', joint: 'and', b: 'game developer' };
+
+const uid = `mx${Math.random().toString(36).slice(2, 8)}`;
+const M_PATH =
+  'm960.6 156.5l326.5 188.5v690l-597.5 345-163-94.1v-745.8l-61.5 126-46.5-63.6v370l-109.2-63v-439l109.1-63 46.5 63.6 61.6-126.1 109-62.8v940.6l54 31.2 488.4-282v-564l-217.4-125.5z';
+const L_PATH =
+  'm418.6 1097.5l-217.5-125.5v-564l488.5-282 54 31.2v940.6l326.1-188.3v-126l-217.1 125.4v-814.8l-163-94.1-597.6 345v690l326.6 188.5z';
+---
+
+<div class="lockup">
+  <Tag class="lockup__inner">
+    <span class="sr-only">MaxyLAND, {slogan.a} {slogan.joint} {slogan.b}</span>
+    <svg class="mark" viewBox="0 0 1380 1380" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id={`${uid}-grad`} gradientUnits="userSpaceOnUse" x1="-82" y1="1272" x2="1462" y2="108">
+          <stop offset="0.26" stop-color="#23ebe9"></stop>
+          <stop offset="0.70" stop-color="#67d45f"></stop>
+          <stop offset="0.96" stop-color="#ebfa56"></stop>
+        </linearGradient>
+        <linearGradient id={`${uid}-shine`} x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0" stop-color="#fff" stop-opacity="0"></stop>
+          <stop offset="0.68" stop-color="#fff" stop-opacity="0.82"></stop>
+          <stop offset="0.8" stop-color="#fff" stop-opacity="0.95"></stop>
+          <stop offset="1" stop-color="#fff" stop-opacity="0"></stop>
+        </linearGradient>
+        <clipPath id={`${uid}-clip`}>
+          <path d={M_PATH}></path>
+          <path d={L_PATH}></path>
+        </clipPath>
+      </defs>
+      <path class="piece piece--l" d={L_PATH} fill={`url(#${uid}-grad)`}></path>
+      <path class="piece piece--m" d={M_PATH} fill={`url(#${uid}-grad)`}></path>
+      <g clip-path={`url(#${uid}-clip)`}>
+        <g class="shine">
+          <rect x="400" y="-500" width="460" height="2400" fill={`url(#${uid}-shine)`} transform="rotate(-27 630 700)"></rect>
+        </g>
+      </g>
+    </svg>
+    <span class="type" aria-hidden="true">
+      <span class="word">
+        {letters.map(([char, color], i) => <span class="letter" style={`--i:${i};color:${color}`}>{char}</span>)}
+      </span>
+      <span class="slogan">
+        {slogan.a} <small>{slogan.joint}</small> {slogan.b}
+      </span>
+    </span>
+  </Tag>
+</div>
+
+<style>
+  .lockup {
+    container-type: inline-size;
+    inline-size: 100%;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  }
+
+  /* Narrow: stacked, the mark above the wordmark. */
+  .lockup__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3cqi;
+    margin: 0;
+    font: inherit;
+    --shift: translateY(14cqi);
+    --emerge: translateY(-0.35em);
+  }
+
+  .mark {
+    position: relative;
+    z-index: 1;
+    display: block;
+    inline-size: 46cqi;
+    block-size: auto;
+    overflow: visible;
+  }
+
+  .type {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2cqi;
+  }
+
+  .word {
+    display: flex;
+    font-family: 'Bakbak One', system-ui, sans-serif;
+    font-size: 15.5cqi;
+    line-height: 0.9;
+    letter-spacing: 0.01em;
+  }
+
+  .slogan {
+    font-family: 'Bakbak One', system-ui, sans-serif;
+    font-size: 4.1cqi;
+    line-height: 1;
+    text-transform: uppercase;
+    color: #f4f7f5;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .slogan small {
+    font-size: 0.68em;
+  }
+
+  /* Wide: the mark sits left of the wordmark, slogan tucked under it. */
+  @container (min-width: 34rem) {
+    .lockup__inner {
+      flex-direction: row;
+      justify-content: center;
+      gap: 3.5cqi;
+      --shift: translateX(31cqi);
+      --emerge: translateX(-0.3em);
+    }
+
+    .mark {
+      inline-size: 30cqi;
+    }
+
+    .type {
+      align-items: flex-end;
+      gap: 0.8cqi;
+      padding-block-start: 1.5cqi;
+    }
+
+    .word {
+      font-size: 11.2cqi;
+    }
+
+    .slogan {
+      font-size: 2.55cqi;
+    }
+  }
+
+  /* ---------- Intro timeline ---------- */
+
+  .piece {
+    transform-box: view-box;
+    transform-origin: 50% 50%;
+    animation: piece-in 520ms var(--ease-out) both;
+  }
+  .piece--l { animation-delay: 150ms; }
+  .piece--m { animation-delay: 260ms; }
+
+  .shine {
+    transform: translateX(-1300px);
+    animation: shine 850ms var(--ease-in-out) 700ms both;
+  }
+
+  .mark {
+    animation: settle 720ms var(--ease-in-out) 1000ms both;
+  }
+
+  .letter {
+    display: inline-block;
+    animation: letter-in 520ms var(--ease-out) both;
+    animation-delay: calc(1420ms + var(--i) * 55ms);
+  }
+
+  .slogan {
+    animation: rise 520ms var(--ease-out) 1880ms both;
+  }
+
+  @keyframes piece-in {
+    from { opacity: 0; transform: scale(0.78); }
+  }
+
+  @keyframes shine {
+    from { transform: translateX(-1300px); }
+    to { transform: translateX(1300px); }
+  }
+
+  @keyframes settle {
+    from { transform: var(--shift); }
+  }
+
+  @keyframes letter-in {
+    from { opacity: 0; transform: var(--emerge); filter: blur(6px); }
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(0.5em); }
+  }
+
+  @keyframes fade {
+    from { opacity: 0; }
+  }
+
+  /* Returning in the same session: show the settled lockup at once. */
+  :global(html.intro-seen) .piece,
+  :global(html.intro-seen) .mark,
+  :global(html.intro-seen) .letter,
+  :global(html.intro-seen) .slogan {
+    animation: none;
+  }
+  :global(html.intro-seen) .shine {
+    animation: none;
+    visibility: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .piece { animation: fade 320ms ease both; animation-delay: 80ms; }
+    .mark { animation: none; }
+    .shine { animation: none; visibility: hidden; }
+    .letter { animation: fade 320ms ease 260ms both; }
+    .slogan { animation: fade 320ms ease 320ms both; }
+  }
+
+  .sr-only {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

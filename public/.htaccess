@@ -1,0 +1,47 @@
+Options -Indexes
+DirectorySlash On
+ErrorDocument 404 /404.html
+
+RewriteEngine on
+
+# Legacy links from the old site: /?lng=ES -> /es/, /?lng=EN -> /
+RewriteCond %{QUERY_STRING} (^|&)lng=es(&|$) [NC]
+RewriteRule ^$ /es/? [R=301,L]
+RewriteCond %{QUERY_STRING} (^|&)lng=en(&|$) [NC]
+RewriteRule ^$ /? [R=301,L]
+
+# Language negotiation, home page only.
+# A manual choice (cookie "lang", set by the language switcher) always wins.
+RewriteCond %{HTTP_COOKIE} (^|;\s*)lang=es(;|$)
+RewriteRule ^$ /es/ [R=302,L]
+RewriteCond %{HTTP_COOKIE} !(^|;\s*)lang=(en|es)(;|$)
+RewriteCond %{HTTP:Accept-Language} ^es [NC]
+RewriteRule ^$ /es/ [R=302,L]
+
+# Store listings link the privacy policies with and without ".html".
+RewriteCond %{THE_REQUEST} \s/(privacy|privacidad)\.html[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L]
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(privacy|privacidad)$ $1.html [L]
+
+<IfModule mod_headers.c>
+    <If "%{REQUEST_URI} =~ m#^/(index\.html)?$#">
+        Header append Vary "Accept-Language, Cookie"
+    </If>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    <FilesMatch "\.(avif|webp|jpe?g|png|svg|woff2|webm|mp4)$">
+        Header set Cache-Control "public, max-age=2592000"
+    </FilesMatch>
+    <If "%{REQUEST_URI} =~ m#^/_astro/#">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </If>
+</IfModule>
+
+<IfModule mod_mime.c>
+    AddType image/avif .avif
+    AddType image/webp .webp
+    AddType video/webm .webm
+    AddType font/woff2 .woff2
+    AddType text/plain .txt
+</IfModule>

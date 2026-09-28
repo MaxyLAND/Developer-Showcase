@@ -1,0 +1,96 @@
+# Double Trip: MaxyLAND's first commercial game.
+# Image paths are relative to this file.
+title: Double Trip
+kind: game
+status: released
+order: 1
+released: 2025-05-08
+platforms: [Windows, macOS, Linux]
+engine: Unity 2023
+
+tagline:
+  en: A cozy sokoban for one or two players.
+  es: Un sokoban acogedor para uno o dos jugadores.
+
+summary:
+  en: Two jelly blobs cross an island archipelago, pushing rocks into holes and rolling logs into bridges. Play it solo or share it in local co-op.
+  es: Dos blobs de gelatina cruzan un archipiélago empujando rocas a los agujeros y rodando troncos para hacer puentes. Juégalo en solitario o compártelo en cooperativo local.
+
+body:
+  - en: Double Trip is a tile-based sokoban built around two friendly characters. They help each other across the islands, so most puzzles ask you to think with both of them at once.
+    es: Double Trip es un sokoban por casillas protagonizado por dos personajes amigables. Se ayudan entre sí para cruzar las islas, así que casi todos los puzles te piden pensar con los dos a la vez.
+  - en: Around 30 puzzles spread over an explorable overworld, two to three hours from the first island to the last. The characters are customizable and the game plays with keyboard or gamepad.
+    es: Unos 30 puzles repartidos por un mapa explorable, entre dos y tres horas de la primera isla a la última. Los personajes se pueden personalizar y se juega con teclado o mando.
+  - en: I made the game in Unity 2023, code and art included. Music, sound and level design are by Javier Reina Ruiz. It launched on Steam and itch.io in May 2025 and has sold more than 500 copies.
+    es: Hice el juego en Unity 2023, código y arte incluidos. La música, el sonido y el diseño de niveles son de Javier Reina Ruiz. Salió en Steam e itch.io en mayo de 2025 y ha vendido más de 500 copias.
+
+facts:
+  - label: { en: Genre, es: Género }
+    value: { en: Sokoban puzzle, es: Puzles tipo sokoban }
+  - label: { en: Players, es: Jugadores }
+    value: { en: '1-2, local co-op', es: '1-2, cooperativo local' }
+  - label: { en: Length, es: Duración }
+    value: { en: '~30 puzzles, 2-3 h', es: '~30 puzles, 2-3 h' }
+  - label: { en: Sales, es: Ventas }
+    value: { en: 500+ copies, es: Más de 500 copias }
+
+links:
+  - kind: steam
+    url: https://store.steampowered.com/app/3414480/Double_Trip/
+  - kind: itch
+    url: https://maxyland.itch.io/double-trip
+
+cover: ../../assets/projects/double-trip/key-art-wide.jpg
+coverAlt:
+  en: Isometric island from Double Trip with a blue jelly block, an orange crate and a log floating on turquoise water.
+  es: Isla isométrica de Double Trip con un bloque de gelatina azul, una caja naranja y un tronco flotando sobre agua turquesa.
+logo: ../../assets/projects/double-trip/logo.png
+
+screenshots:
+  - src: ../../assets/projects/double-trip/screenshot-1.jpg
+    alt:
+      en: A small grassy island with stone blocks, a log and a glowing exit, surrounded by water.
+      es: Una pequeña isla de hierba con bloques de piedra, un tronco y una salida brillante, rodeada de agua.
+  - src: ../../assets/projects/double-trip/screenshot-2.jpg
+    alt:
+      en: A foggy forest level with stone paths, pushable blocks and one of the blobs.
+      es: Un nivel de bosque con niebla, caminos de piedra, bloques empujables y uno de los blobs.
+  - src: ../../assets/projects/double-trip/screenshot-3.jpg
+    alt:
+      en: The overworld, where wooden bridges link the islands and a character named Snail waits by a level.
+      es: El mapa del mundo, donde puentes de madera unen las islas y un personaje llamado Snail espera junto a un nivel.
+  - src: ../../assets/projects/double-trip/screenshot-4.jpg
+    alt:
+      en: A dense forest puzzle crossed by light rays, with logs and blocks to move.
+      es: Un puzle en un bosque denso atravesado por rayos de luz, con troncos y bloques que mover.
+  - src: ../../assets/projects/double-trip/screenshot-5.jpg
+    alt:
+      en: An island in open water with a log, two blocks and the exit portal.
+      es: Una isla en mar abierto con un tronco, dos bloques y el portal de salida.
+  - src: ../../assets/projects/double-trip/screenshot-6.jpg
+    alt:
+      en: A winding stone path through the forest with blocks and a glowing goal.
+      es: Un camino de piedras serpenteando por el bosque con bloques y una meta brillante.
+
+video:
+  webm: /media/double-trip/gameplay.webm
+  mp4: /media/double-trip/gameplay.mp4
+  poster: ../../assets/projects/double-trip/gameplay-poster.jpg
+
+trailer:
+  youtubeId: qMvBLWsvPeI
+  title: Double Trip, Release Trailer
+
+credits:
+  - role: { en: 'Development, programming and art', es: 'Desarrollo, programación y arte' }
+    name: MaxyLAND
+  - role: { en: 'Music, sound and level design', es: 'Música, sonido y diseño de niveles' }
+    name: Javier Reina Ruiz
+
+press:
+  - outlet: Thinky Games
+    title: Double Trip is the perfect Sokoban for beginners and those after a cosy break
+    url: https://thinkygames.com/features/double-trip-is-the-perfect-sokoban-for-beginners-and-those-after-a-cosy-break/
+  - outlet: Anokturnus
+    title: Double Trip
+    url: https://anokturnus.review/index.php/2025/05/26/double-trip/

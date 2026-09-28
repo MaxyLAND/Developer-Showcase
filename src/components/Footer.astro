@@ -1,0 +1,52 @@
+---
+import Mark from './Mark.astro';
+import { type Locale } from '../i18n/routes';
+import { t } from '../i18n/ui';
+import { profile } from '../data/profile';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = t(locale);
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer__inner wrap">
+    <p class="footer__brand">
+      <Mark size={22} />
+      <span>© {year} {profile.publisher}</span>
+    </p>
+    <a class="footer__link" href={ui.footer.privacyHref}>{ui.footer.privacy}</a>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-block: 2rem calc(2rem + env(safe-area-inset-bottom));
+  }
+
+  .footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: var(--step--1);
+    color: var(--text-3);
+  }
+
+  .footer__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .footer__link {
+    color: var(--cyan);
+    text-underline-offset: 0.22em;
+    text-decoration-thickness: 1px;
+  }
+</style>

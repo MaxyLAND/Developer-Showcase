@@ -1,0 +1,206 @@
+---
+import LogoIntro from './LogoIntro.astro';
+import Icon from './Icon.astro';
+import { type Locale, pathFor } from '../i18n/routes';
+import { t } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  featured: { slug: string; title: string };
+}
+
+const { locale, featured } = Astro.props;
+const ui = t(locale);
+---
+
+<section class="hero stage cut" aria-labelledby="about-title">
+
+  <div class="hero__inner">
+    <div class="hero__mark">
+      <LogoIntro locale={locale} heading />
+      <span class="selection" aria-hidden="true">
+        <i></i><i></i><i></i><i></i>
+      </span>
+    </div>
+
+    <aside class="inspector panel" id="about" data-enter>
+      <h2 class="inspector__title" id="about-title">{ui.hero.title}</h2>
+      <p class="inspector__body">{ui.hero.body}</p>
+      <dl class="props">
+        {
+          ui.hero.rows.map((row) => (
+            <div class="props__row">
+              <dt>{row.label}</dt>
+              <dd>{row.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+      <div class="actions">
+        <a class="pill pill--primary" href={pathFor({ page: 'project', slug: featured.slug }, locale)}>
+          {ui.projects.view(featured.title)}
+          <Icon name="arrow-right" />
+        </a>
+        <a class="pill pill--secondary" href="#contact">{ui.hero.contact}</a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .hero {
+    --cut: clamp(2.5rem, 5vw, 5rem);
+    padding-block: clamp(2.5rem, 6vh, 5rem) clamp(4rem, 9vh, 7rem);
+    overflow: hidden;
+  }
+
+  /* A soft lift of the ground behind the mark: depth, not glow. */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 55% 60% at 38% 45%, rgb(35 235 233 / 0.07), transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(20rem, 25rem);
+    align-items: center;
+    gap: clamp(2rem, 4vw, 4.5rem);
+    inline-size: min(100% - 2 * var(--gutter), var(--page));
+    min-block-size: min(calc(100dvh - 4rem - 9rem), 46rem);
+    margin-inline: auto;
+  }
+
+  .hero__mark {
+    --hold: calc((min(25rem, 30vw) + clamp(2rem, 4vw, 4.5rem)) / 2);
+    position: relative;
+    animation: hold 700ms var(--ease-in-out) 2000ms both;
+  }
+
+  /* The lockup is the selected object; the inspector describes it.
+     Monochrome and rectangular: scenery, never a control. */
+  .selection {
+    position: absolute;
+    inset: -1.25rem 0;
+    border: 1px solid var(--line-2);
+    pointer-events: none;
+    animation: enter 560ms var(--ease-out) 2250ms both;
+  }
+
+  .selection i {
+    position: absolute;
+    inline-size: 7px;
+    block-size: 7px;
+    background: var(--stage);
+    border: 1px solid var(--text-3);
+  }
+
+  .selection i:nth-child(1) { inset-block-start: -4px; inset-inline-start: -4px; }
+  .selection i:nth-child(2) { inset-block-start: -4px; inset-inline-end: -4px; }
+  .selection i:nth-child(3) { inset-block-end: -4px; inset-inline-start: -4px; }
+  .selection i:nth-child(4) { inset-block-end: -4px; inset-inline-end: -4px; }
+
+  .inspector {
+    padding: clamp(1.25rem, 2vw, 1.75rem);
+    display: grid;
+    gap: 1.1rem;
+    animation: enter 560ms var(--ease-out) 2200ms both;
+  }
+
+  .inspector__title {
+    font-size: var(--step-2);
+    line-height: 1.08;
+  }
+
+  .inspector__body {
+    color: var(--text-2);
+    max-inline-size: 42ch;
+  }
+
+  .props {
+    display: grid;
+    border-radius: var(--r-card);
+    background: var(--panel-2);
+    overflow: hidden;
+  }
+
+  .props__row {
+    display: grid;
+    grid-template-columns: 7.5rem 1fr;
+    gap: 0.75rem;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+  }
+
+  .props__row + .props__row {
+    border-block-start: 1px solid var(--line);
+  }
+
+  .props dt {
+    color: var(--text-3);
+  }
+
+  .props dd {
+    color: var(--text);
+  }
+
+  .inspector .actions {
+    padding-block-start: 0.25rem;
+  }
+
+  @keyframes hold {
+    from { transform: translateX(var(--hold)); }
+  }
+
+  @keyframes enter {
+    from { opacity: 0; transform: translateY(14px); }
+  }
+
+  :global(html.intro-seen) .hero__mark,
+  :global(html.intro-seen) .selection,
+  :global(html.intro-seen) .inspector {
+    animation: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__mark { animation: none; }
+    .selection,
+    .inspector { animation: fade 320ms ease 400ms both; }
+  }
+
+  @keyframes fade {
+    from { opacity: 0; }
+  }
+
+  @media (max-width: 55.99rem) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+      min-block-size: 0;
+      gap: 2.5rem;
+    }
+
+    .hero__mark {
+      animation: none;
+      inline-size: min(100% - 2.5rem, 24rem);
+      margin-inline: auto;
+      margin-block-start: 1.5rem;
+    }
+
+    .selection {
+      inset: -1rem;
+      animation-delay: 2050ms;
+    }
+
+    .inspector {
+      animation-delay: 2050ms;
+    }
+
+    .props__row {
+      grid-template-columns: 6.5rem 1fr;
+    }
+  }
+</style>

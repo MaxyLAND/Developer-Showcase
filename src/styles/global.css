@@ -1,0 +1,378 @@
+@import '@fontsource-variable/onest/index.css';
+@import '@fontsource/bakbak-one/latin-400.css';
+
+/*
+ * MaxyLAND, friendly editor scene.
+ * Two layers, never mixed:
+ *   Decoration: quiet, monochrome, rectangular. Never looks pressable.
+ *   Interaction: pills in the brand cyan -> green. Everything cyan can be pressed.
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* Ground and surfaces (teal-black, tinted toward the logo) */
+  --bg: #0d1215;
+  --stage: #0f161a;
+  --panel: #141b1f;
+  --panel-2: #1a2327;
+  --panel-3: #212c31;
+  --line: #243036;
+  --line-2: #2f3d44;
+  --grid: rgb(150 214 206 / 0.055);
+
+  /* Text */
+  --text: #e9f0ef;
+  --text-2: #aab9ba;
+  --text-3: #7f9194;
+
+  /* Brand */
+  --cyan: #23ebe9;
+  --green: #67d45f;
+  --yellow: #ebfa56;
+  --brand: linear-gradient(53deg, #23ebe9 26%, #67d45f 70%, #ebfa56 96%);
+  --action: linear-gradient(53deg, #23ebe9 8%, #67d45f 92%);
+  --on-action: #04201d;
+  --cyan-tint: rgb(35 235 233 / 0.12);
+  --cyan-tint-2: rgb(35 235 233 / 0.2);
+
+  /* Type */
+  --font-display: 'Bakbak One', 'Onest Variable', system-ui, sans-serif;
+  --font-text: 'Onest Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --step--1: 0.875rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.25rem;
+  --step-2: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+  --step-3: clamp(2.125rem, 1.5rem + 2.6vw, 3.5rem);
+  --step-4: clamp(2.5rem, 1.6rem + 3.8vw, 4.5rem);
+
+  /* Shape: rectangles are surfaces, pills are actions */
+  --r-panel: 18px;
+  --r-card: 12px;
+  --r-chip: 6px;
+  --r-pill: 999px;
+
+  /* Space */
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --page: 76rem;
+  --section: clamp(4.5rem, 3rem + 6vw, 8rem);
+
+  /* Motion (Emil Kowalski's curves) */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  /* Depth: tinted, offset, soft */
+  --shadow-panel: 0 18px 40px -18px rgb(0 8 10 / 0.7), 0 2px 6px -2px rgb(0 8 10 / 0.5);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-text);
+  font-size: 100%;
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+  scrollbar-color: var(--line-2) var(--bg);
+  accent-color: var(--cyan);
+  caret-color: var(--cyan);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  min-block-size: 100dvh;
+  font-size: var(--step-0);
+  background: var(--bg);
+}
+
+::selection {
+  background: rgb(35 235 233 / 0.28);
+  color: #ffffff;
+}
+
+img,
+video,
+svg {
+  display: block;
+  max-inline-size: 100%;
+}
+
+img,
+video {
+  block-size: auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+/* Inline links inside prose are interactive, so they are cyan. */
+.prose a {
+  color: var(--cyan);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  transition: text-decoration-color 160ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .prose a:hover {
+    text-decoration-color: transparent;
+  }
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+.sr-only {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.wrap {
+  inline-size: min(100% - 2 * var(--gutter), var(--page));
+  margin-inline: auto;
+}
+
+/* ---------- Decoration layer ---------- */
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--r-panel);
+  box-shadow: var(--shadow-panel);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.3em 0.6em;
+  border-radius: var(--r-chip);
+  background: var(--panel-3);
+  color: var(--text-2);
+  font-size: var(--step--1);
+  line-height: 1.2;
+}
+
+.section-title {
+  font-size: var(--step-3);
+}
+
+/* ---------- Interaction layer: pills ---------- */
+
+.pill {
+  --pill-h: 2.875rem;
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55em;
+  min-block-size: var(--pill-h);
+  padding: 0 1.25em;
+  border: 1px solid transparent;
+  border-radius: var(--r-pill);
+  font-family: var(--font-text);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  transition:
+    transform 160ms var(--ease-out),
+    background-color 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease;
+}
+
+.pill:active {
+  transform: scale(0.97);
+}
+
+.pill .icon {
+  flex: none;
+}
+
+/* The logo's shine is the active light of every pill. */
+.pill::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgb(255 255 255 / 0.32) 46%,
+    rgb(255 255 255 / 0.45) 52%,
+    transparent 60%
+  );
+  transform: translateX(-110%);
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pill:hover::after {
+    transform: translateX(110%);
+    transition: transform 650ms var(--ease-in-out);
+  }
+}
+
+.pill--primary {
+  background: var(--action);
+  color: var(--on-action);
+}
+
+.pill--secondary {
+  border-color: rgb(35 235 233 / 0.55);
+  color: var(--cyan);
+  background: transparent;
+}
+
+.pill--secondary::after {
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgb(35 235 233 / 0.16) 46%,
+    rgb(35 235 233 / 0.24) 52%,
+    transparent 60%
+  );
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pill--secondary:hover {
+    background: var(--cyan-tint);
+    border-color: var(--cyan);
+  }
+}
+
+.pill--ghost {
+  --pill-h: 2.5rem;
+  padding: 0 0.95em;
+  color: var(--cyan);
+  font-weight: 500;
+}
+
+.pill--ghost::after {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pill--ghost:hover {
+    background: var(--cyan-tint);
+  }
+}
+
+.pill--ghost[aria-current='true'],
+.pill--ghost[aria-current='page'] {
+  background: var(--cyan-tint-2);
+}
+
+.pill--icon {
+  padding: 0;
+  inline-size: var(--pill-h);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill,
+  .pill::after {
+    transition: none;
+  }
+  .pill:active {
+    transform: none;
+  }
+}
+
+/* ---------- Stage: the scene grid ---------- */
+
+.stage {
+  position: relative;
+  background-color: var(--stage);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: center top;
+}
+
+/* One 53-degree cut per stage, the angle of the brand gradient. */
+.cut {
+  --cut: 4.5rem;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut) * 0.7536) 100%, 0 100%);
+}

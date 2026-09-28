@@ -1,0 +1,736 @@
+---
+import { Image, getImage } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Icon from './Icon.astro';
+import { type Locale, pathFor } from '../i18n/routes';
+import { t, formatMonthYear } from '../i18n/ui';
+import { getSteamReviews } from '../data/steam';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  locale: Locale;
+}
+
+const { project, locale } = Astro.props;
+const { data } = project;
+const ui = t(locale);
+const home = pathFor({ page: 'home' }, locale);
+
+const steam = data.links.find((l) => l.kind === 'steam');
+const appId = steam?.url.match(/\/app\/(\d+)/)?.[1];
+const reviews = appId ? await getSteamReviews(Number(appId)) : null;
+
+const shots = await Promise.all(
+  data.screenshots.map(async (s) => ({
+    ...s,
+    full: await getImage({ src: s.src, width: 1920, format: 'webp' }),
+  })),
+);
+
+const trailerPoster = data.screenshots[2]?.src ?? data.cover;
+const linkIcon = { steam: 'steam', itch: 'itch', github: 'github', youtube: 'play', web: 'arrow-up-right', download: 'arrow-up-right' } as const;
+const [primaryLink, ...otherLinks] = data.links;
+---
+
+<Base
+  locale={locale}
+  route={{ page: 'project', slug: project.id }}
+  title={`${data.title} | MaxyLAND`}
+  description={data.summary[locale]}
+  image={data.cover.src}
+>
+  <header class="head stage cut">
+    <div class="head__inner wrap">
+      <a class="pill pill--ghost head__back" href={`${home}#projects`}>
+        <Icon name="arrow-left" />
+        {ui.project.back}
+      </a>
+
+      <div class="head__art">
+        <Image
+          src={data.cover}
+          alt={data.coverAlt[locale]}
+          widths={[640, 960, 1280, 1920]}
+          sizes="(min-width: 76rem) 76rem, 100vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+
+      <div class="head__intro">
+        <h1 class="head__title">
+          {
+            data.logo ? (
+              <Image src={data.logo} alt={data.title} widths={[400, 800]} sizes="22rem" class="head__logo" loading="eager" />
+            ) : (
+              data.title
+            )
+          }
+        </h1>
+        <div class="head__text">
+          <p class="head__tagline">{data.tagline[locale]}</p>
+          <p class="head__summary">{data.summary[locale]}</p>
+          {
+            primaryLink && (
+              <div class="actions">
+                <a
+                  class="pill pill--primary"
+                  href={primaryLink.url}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label={ui.links.on(data.title, ui.links[primaryLink.kind])}
+                >
+                  <Icon name={linkIcon[primaryLink.kind]} />
+                  {ui.links[primaryLink.kind]}
+                </a>
+                {otherLinks.map((l) => (
+                  <a
+                    class="pill pill--secondary"
+                    href={l.url}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label={ui.links.on(data.title, ui.links[l.kind])}
+                  >
+                    <Icon name={linkIcon[l.kind]} />
+                    {ui.links[l.kind]}
+                  </a>
+                ))}
+              </div>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="body wrap">
+    <div class="body__main">
+      <div class="prose">
+        {data.body.map((p) => <p>{p[locale]}</p>)}
+      </div>
+
+      {
+        data.trailer && (
+          <section class="block" aria-labelledby="trailer-title">
+            <h2 class="block__title" id="trailer-title">{ui.project.trailer}</h2>
+            <div class="trailer media-frame" data-trailer={data.trailer.youtubeId} data-title={data.trailer.title}>
+              <Image src={trailerPoster} alt="" widths={[640, 960, 1280]} sizes="(min-width: 64rem) 46rem, 100vw" loading="lazy" />
+              <button class="pill pill--primary trailer__play" type="button">
+                <Icon name="play" />
+                {ui.project.playTrailer}
+              </button>
+            </div>
+          </section>
+        )
+      }
+
+      {
+        shots.length > 0 && (
+          <section class="block" aria-labelledby="shots-title">
+            <h2 class="block__title" id="shots-title">{ui.project.screenshots}</h2>
+            <ul class="shots">
+              {data.video && (
+                <li class="shots__clip">
+                  <video
+                    class="clip"
+                    muted
+                    loop
+                    playsinline
+                    preload="none"
+                    poster={data.video.poster.src}
+                    aria-label={ui.project.gameplay}
+                    data-clip
+                  >
+                    {data.video.webm && <source src={data.video.webm} type="video/webm" />}
+                    {data.video.mp4 && <source src={data.video.mp4} type="video/mp4" />}
+                  </video>
+                </li>
+              )}
+              {shots.map((s, i) => (
+                <li>
+                  <button
+                    class="shot"
+                    type="button"
+                    data-shot={i}
+                    data-full={s.full.src}
+                    data-alt={s.alt[locale]}
+                    aria-label={`${ui.project.openImage} ${i + 1}: ${s.alt[locale]}`}
+                  >
+                    <Image src={s.src} alt="" widths={[480, 800]} sizes="(min-width: 64rem) 23rem, 50vw" loading="lazy" />
+                    <span class="pill pill--secondary pill--icon shot__open" aria-hidden="true">
+                      <Icon name="expand" />
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      {
+        data.press.length > 0 && (
+          <section class="block" aria-labelledby="press-title">
+            <h2 class="block__title" id="press-title">{ui.project.press}</h2>
+            <ul class="press">
+              {data.press.map((p) => (
+                <li>
+                  <span class="press__outlet">{p.outlet}</span>
+                  <a class="press__link" href={p.url} target="_blank" rel="noopener">
+                    {p.title}
+                    <Icon name="arrow-up-right" size={16} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+    </div>
+
+    <aside class="details panel" aria-labelledby="details-title">
+      <h2 class="details__title" id="details-title">{ui.project.details}</h2>
+      <dl class="details__list">
+        {
+          data.released && (
+            <div>
+              <dt>{ui.projects.released}</dt>
+              <dd>{formatMonthYear(data.released, locale)}</dd>
+            </div>
+          )
+        }
+        {
+          data.platforms.length > 0 && (
+            <div>
+              <dt>{ui.project.platforms}</dt>
+              <dd>{data.platforms.join(', ')}</dd>
+            </div>
+          )
+        }
+        {
+          data.engine && (
+            <div>
+              <dt>{ui.project.engine}</dt>
+              <dd>{data.engine}</dd>
+            </div>
+          )
+        }
+        {
+          data.facts.map((f) => (
+            <div>
+              <dt>{f.label[locale]}</dt>
+              <dd class="num">{f.value[locale]}</dd>
+            </div>
+          ))
+        }
+        {
+          reviews && (
+            <div>
+              <dt>{ui.projects.reviews}</dt>
+              <dd class="num">{ui.projects.reviewsValue(reviews.percent, reviews.total)}</dd>
+            </div>
+          )
+        }
+      </dl>
+      {
+        data.credits.length > 0 && (
+          <>
+            <h3 class="details__sub">{ui.project.credits}</h3>
+            <dl class="details__list">
+              {data.credits.map((c) => (
+                <div>
+                  <dt>{c.role[locale]}</dt>
+                  <dd>{c.name}</dd>
+                </div>
+              ))}
+            </dl>
+          </>
+        )
+      }
+    </aside>
+  </div>
+
+  <dialog class="lightbox" data-lightbox aria-label={ui.project.screenshots}>
+    <figure class="lightbox__figure">
+      <img
+        class="lightbox__img"
+        src={shots[0]?.full.src}
+        alt={shots[0]?.alt[locale] ?? ''}
+        width="1920"
+        height="1080"
+        loading="lazy"
+        decoding="async"
+        data-lb-img
+      />
+      <figcaption class="lightbox__caption">
+        <span data-lb-caption></span>
+        <span class="lightbox__count num" data-lb-count></span>
+      </figcaption>
+    </figure>
+    <div class="lightbox__controls">
+      <button class="pill pill--secondary pill--icon" type="button" data-lb-prev aria-label={ui.project.prev}>
+        <Icon name="caret-left" />
+      </button>
+      <button class="pill pill--secondary pill--icon" type="button" data-lb-next aria-label={ui.project.next}>
+        <Icon name="caret-right" />
+      </button>
+      <button class="pill pill--primary" type="button" data-lb-close>
+        <Icon name="close" />
+        {ui.project.close}
+      </button>
+    </div>
+  </dialog>
+  <span hidden data-of={ui.project.of}></span>
+</Base>
+
+<script>
+  // Trailer: load YouTube only when asked (privacy-enhanced domain).
+  document.querySelectorAll<HTMLElement>('[data-trailer]').forEach((box) => {
+    box.querySelector('button')?.addEventListener('click', () => {
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube-nocookie.com/embed/${box.dataset.trailer}?autoplay=1&rel=0`;
+      iframe.title = box.dataset.title ?? 'Trailer';
+      iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      iframe.allowFullscreen = true;
+      box.replaceChildren(iframe);
+      box.classList.add('is-live');
+      iframe.focus();
+    });
+  });
+
+  // Gameplay clip: a living screenshot that plays only while on screen.
+  const clip = document.querySelector<HTMLVideoElement>('[data-clip]');
+  if (clip) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      clip.controls = true;
+    } else {
+      new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) clip.play().catch(() => (clip.controls = true));
+          else clip.pause();
+        },
+        { threshold: 0.4 },
+      ).observe(clip);
+    }
+  }
+
+  // Screenshot lightbox: one image held at a time, the rest of the page dims.
+  const dialog = document.querySelector<HTMLDialogElement>('[data-lightbox]');
+  const shots = [...document.querySelectorAll<HTMLButtonElement>('[data-shot]')];
+  const of = document.querySelector<HTMLElement>('[data-of]')?.dataset.of ?? 'of';
+  if (dialog && shots.length) {
+    const img = dialog.querySelector<HTMLImageElement>('[data-lb-img]')!;
+    const caption = dialog.querySelector<HTMLElement>('[data-lb-caption]')!;
+    const count = dialog.querySelector<HTMLElement>('[data-lb-count]')!;
+    let index = 0;
+    let opener: HTMLElement | null = null;
+
+    const show = (i: number) => {
+      index = (i + shots.length) % shots.length;
+      const s = shots[index];
+      img.src = s.dataset.full ?? '';
+      img.alt = s.dataset.alt ?? '';
+      caption.textContent = s.dataset.alt ?? '';
+      count.textContent = `${index + 1} ${of} ${shots.length}`;
+    };
+
+    shots.forEach((s, i) =>
+      s.addEventListener('click', () => {
+        opener = s;
+        show(i);
+        dialog.showModal();
+      }),
+    );
+    dialog.querySelector('[data-lb-prev]')?.addEventListener('click', () => show(index - 1));
+    dialog.querySelector('[data-lb-next]')?.addEventListener('click', () => show(index + 1));
+    dialog.querySelector('[data-lb-close]')?.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(index - 1);
+      if (e.key === 'ArrowRight') show(index + 1);
+    });
+    dialog.addEventListener('close', () => opener?.focus());
+  }
+</script>
+
+<style>
+  .head {
+    --cut: clamp(2.5rem, 5vw, 5rem);
+    padding-block: clamp(1.25rem, 3vw, 2rem) clamp(3.5rem, 7vw, 6rem);
+  }
+
+  .head__inner {
+    display: grid;
+    gap: clamp(1.25rem, 2.5vw, 1.75rem);
+  }
+
+  .head__back {
+    justify-self: start;
+    margin-inline-start: -0.6rem;
+  }
+
+  .head__art {
+    border-radius: var(--r-panel);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-panel);
+    background: var(--panel-2);
+  }
+
+  .head__art img {
+    inline-size: 100%;
+    aspect-ratio: 1920 / 620;
+    object-fit: cover;
+  }
+
+  .head__intro {
+    display: grid;
+    grid-template-columns: minmax(14rem, 22rem) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+
+  .head__title {
+    margin-block-start: clamp(-6rem, -7vw, -3rem);
+    position: relative;
+  }
+
+  .head__logo {
+    inline-size: 100%;
+    filter: drop-shadow(0 12px 18px rgb(0 8 10 / 0.55));
+  }
+
+  .head__text {
+    display: grid;
+    gap: 1rem;
+    padding-block-start: 0.5rem;
+  }
+
+  .head__tagline {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    line-height: 1.1;
+  }
+
+  .head__summary {
+    color: var(--text-2);
+    max-inline-size: 58ch;
+  }
+
+  .body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 22rem);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: start;
+    padding-block: var(--section);
+  }
+
+  .body__main {
+    display: grid;
+    gap: clamp(3rem, 6vw, 4.5rem);
+    min-inline-size: 0;
+  }
+
+  .prose {
+    display: grid;
+    gap: 1.1rem;
+    max-inline-size: 62ch;
+    font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+
+  .prose p:first-child {
+    color: var(--text);
+  }
+
+  .block {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .block__title {
+    font-size: var(--step-2);
+  }
+
+  .media-frame {
+    inline-size: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--r-card);
+    border: 1px solid var(--line);
+    background: var(--panel-2);
+    overflow: hidden;
+    object-fit: cover;
+  }
+
+  .trailer {
+    position: relative;
+  }
+
+  .trailer :global(img),
+  .trailer :global(iframe) {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    border: 0;
+  }
+
+  .trailer :global(img) {
+    filter: brightness(0.7);
+  }
+
+  .trailer__play {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .trailer__play:active {
+    transform: translate(-50%, -50%) scale(0.97);
+  }
+
+  .shots {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .shots__clip {
+    grid-column: 1 / -1;
+  }
+
+  .clip {
+    inline-size: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border: 1px solid var(--line);
+    border-radius: var(--r-card);
+    background: var(--panel-2);
+  }
+
+  .shot {
+    position: relative;
+    display: block;
+    inline-size: 100%;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--r-card);
+    background: var(--panel-2);
+    overflow: hidden;
+    cursor: zoom-in;
+    transition:
+      border-color 200ms ease,
+      transform 160ms var(--ease-out);
+  }
+
+  .shot:active {
+    transform: scale(0.985);
+  }
+
+  /* The visible "this opens" signal: an action pill on every thumbnail. */
+  .shot__open {
+    --pill-h: 2.5rem;
+    position: absolute;
+    inset-block-end: 0.6rem;
+    inset-inline-end: 0.6rem;
+    background: rgb(13 18 21 / 0.78);
+    border-color: rgb(35 235 233 / 0.7);
+  }
+
+  .shot :global(img) {
+    inline-size: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    transition: transform 400ms var(--ease-out);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .shot:hover {
+      border-color: var(--cyan);
+    }
+    .shot:hover .shot__open {
+      background: rgb(13 18 21 / 0.9);
+      border-color: var(--cyan);
+    }
+    .shot:hover :global(img) {
+      transform: scale(1.03);
+    }
+  }
+
+  .press {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .press li {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .press__outlet {
+    font-size: var(--step--1);
+    color: var(--text-3);
+  }
+
+  .press__link {
+    color: var(--cyan);
+    font-weight: 600;
+    text-underline-offset: 0.22em;
+    text-decoration-thickness: 1px;
+  }
+
+  .press__link :global(.icon) {
+    display: inline-block;
+    margin-inline-start: 0.3em;
+    vertical-align: -0.15em;
+  }
+
+  .details {
+    position: sticky;
+    inset-block-start: 5.5rem;
+    display: grid;
+    gap: 1rem;
+    padding: 1.35rem;
+  }
+
+  .details__title {
+    font-size: var(--step-1);
+    padding-block-end: 0.75rem;
+    border-block-end: 1px solid var(--line);
+  }
+
+  .details__sub {
+    font-family: var(--font-text);
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--text-3);
+    padding-block-start: 0.5rem;
+  }
+
+  .details__list {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .details__list dt {
+    font-size: var(--step--1);
+    color: var(--text-3);
+  }
+
+  .details__list dd {
+    line-height: 1.4;
+  }
+
+  /* Lightbox */
+  .lightbox {
+    inline-size: min(100% - 2rem, 76rem);
+    max-block-size: calc(100dvh - 2rem);
+    padding: 0;
+    border: 1px solid var(--line-2);
+    border-radius: var(--r-panel);
+    background: var(--panel);
+    color: var(--text);
+    box-shadow: var(--shadow-panel);
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 220ms ease,
+      transform 260ms var(--ease-out),
+      overlay 260ms allow-discrete,
+      display 260ms allow-discrete;
+  }
+
+  .lightbox[open] {
+    display: grid;
+  }
+
+  @starting-style {
+    .lightbox[open] {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+
+  .lightbox::backdrop {
+    background: rgb(4 8 10 / 0.86);
+  }
+
+  .lightbox__figure {
+    display: grid;
+    min-block-size: 0;
+  }
+
+  .lightbox__img {
+    inline-size: 100%;
+    max-block-size: calc(100dvh - 9rem);
+    object-fit: contain;
+    background: #000;
+  }
+
+  .lightbox__caption {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem 1.1rem 0;
+    color: var(--text-2);
+    font-size: 0.9375rem;
+  }
+
+  .lightbox__count {
+    flex: none;
+    color: var(--text-3);
+  }
+
+  .lightbox__controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 0.9rem 1.1rem 1.1rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lightbox {
+      transition: opacity 200ms ease;
+    }
+    @starting-style {
+      .lightbox[open] {
+        transform: none;
+      }
+    }
+  }
+
+  @media (max-width: 63.99rem) {
+    .body {
+      grid-template-columns: 1fr;
+    }
+
+    .details {
+      position: static;
+      order: -1;
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .head__art img {
+      aspect-ratio: 16 / 9;
+      object-position: 42% 50%;
+    }
+
+    .head__intro {
+      grid-template-columns: 1fr;
+    }
+
+    .head__title {
+      inline-size: min(100%, 18rem);
+    }
+
+    .shots {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

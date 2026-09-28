@@ -1,0 +1,243 @@
+---
+import Icon from './Icon.astro';
+import { type Locale } from '../i18n/routes';
+import { t } from '../i18n/ui';
+import { profile } from '../data/profile';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = t(locale);
+
+const emails = [
+  { label: ui.contact.proposals, address: profile.email.contact, icon: 'envelope' as const },
+  { label: ui.contact.support, address: profile.email.support, icon: 'lifebuoy' as const },
+];
+
+const profiles = [
+  { href: profile.links.github, label: ui.links.github, icon: 'github' as const },
+  { href: profile.links.x, label: ui.links.x, icon: 'x' as const },
+  { href: profile.links.itch, label: ui.links.itch, icon: 'itch' as const },
+  { href: profile.links.steam, label: ui.links.steam, icon: 'steam' as const },
+];
+---
+
+<section class="contact stage cut" id="contact" aria-labelledby="contact-title">
+  <div class="contact__inner wrap">
+    <div class="contact__intro">
+      <h2 class="section-title" id="contact-title">{ui.contact.title}</h2>
+      <p>{ui.contact.body}</p>
+    </div>
+
+    <div class="contact__panel panel">
+      <ul class="emails">
+        {
+          emails.map((e) => (
+            <li class="email">
+              <span class="email__icon">
+                <Icon name={e.icon} size={22} />
+              </span>
+              <span class="email__text">
+                <span class="email__label">{e.label}</span>
+                <span class="email__address">{e.address}</span>
+              </span>
+              <span class="email__actions">
+                <button
+                  class="pill pill--secondary pill--icon"
+                  type="button"
+                  data-copy={e.address}
+                  data-copied={ui.contact.copied}
+                  aria-label={`${ui.contact.copy} ${e.address}`}
+                >
+                  <Icon name="copy" />
+                </button>
+                <a class="pill pill--primary" href={`mailto:${e.address}`}>
+                  {ui.contact.write}
+                </a>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="profiles">
+        <h3 class="profiles__title">{ui.contact.profiles}</h3>
+        <ul class="profiles__list">
+          {
+            profiles.map((p) => (
+              <li>
+                <a class="pill pill--secondary" href={p.href} target="_blank" rel="noopener">
+                  <Icon name={p.icon} />
+                  {p.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+  <p class="toast" role="status" aria-live="polite" data-toast></p>
+</section>
+
+<script>
+  const toast = document.querySelector<HTMLElement>('[data-toast]');
+  let timer: number | undefined;
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy ?? '');
+      } catch {
+        return;
+      }
+      if (!toast) return;
+      toast.textContent = `${btn.dataset.copied}: ${btn.dataset.copy}`;
+      toast.classList.add('is-on');
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => toast.classList.remove('is-on'), 2200);
+    });
+  });
+</script>
+
+<style>
+  .contact {
+    --cut: clamp(2.5rem, 5vw, 5rem);
+    padding-block: var(--section) calc(var(--section) + 1rem);
+    margin-block-start: var(--section);
+  }
+
+  .contact__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: start;
+  }
+
+  .contact__intro {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .contact__intro p {
+    color: var(--text-2);
+    max-inline-size: 38ch;
+    font-size: var(--step-1);
+    line-height: 1.5;
+  }
+
+  .contact__panel {
+    display: grid;
+    gap: 1.75rem;
+    padding: clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  .emails {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .email {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1rem;
+    border-radius: var(--r-card);
+    background: var(--panel-2);
+  }
+
+  .email__icon {
+    color: var(--text-3);
+  }
+
+  .email__text {
+    display: grid;
+    min-inline-size: 0;
+  }
+
+  .email__label {
+    font-size: var(--step--1);
+    color: var(--text-3);
+  }
+
+  .email__address {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  .email__actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .profiles {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .profiles__title {
+    font-family: var(--font-text);
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--text-3);
+  }
+
+  .profiles__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .toast {
+    position: fixed;
+    inset-block-end: max(1.25rem, env(safe-area-inset-bottom));
+    inset-inline-start: 50%;
+    z-index: 60;
+    padding: 0.7rem 1.1rem;
+    border: 1px solid var(--line-2);
+    border-radius: var(--r-card);
+    background: var(--panel-3);
+    color: var(--text);
+    font-size: 0.9375rem;
+    box-shadow: var(--shadow-panel);
+    opacity: 0;
+    transform: translate(-50%, 100%);
+    transition:
+      opacity 200ms ease,
+      transform 400ms var(--ease-out);
+    pointer-events: none;
+  }
+
+  .toast:global(.is-on) {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .toast {
+      transform: translate(-50%, 0);
+    }
+  }
+
+  @media (max-width: 55.99rem) {
+    .contact__inner {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 29.99rem) {
+    .email {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .email__actions {
+      grid-column: 1 / -1;
+    }
+
+    .email__actions .pill--primary {
+      flex: 1;
+    }
+  }
+</style>

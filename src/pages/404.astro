@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { t } from '../i18n/ui';
+
+const ui = t('en');
+const es = t('es');
+---
+
+<Base locale="en" route={{ page: 'home' }} title={ui.meta.notFoundTitle} description={ui.notFound.body}>
+  <section class="nf stage cut">
+    <div class="nf__inner wrap">
+      <h1 class="section-title">{ui.notFound.title}</h1>
+      <p>{ui.notFound.body}</p>
+      <p lang="es">{es.notFound.body}</p>
+      <div class="actions">
+        <a class="pill pill--primary" href="/">
+          <Icon name="arrow-left" />
+          {ui.notFound.home}
+        </a>
+        <a class="pill pill--secondary" href="/es/" lang="es">{es.notFound.home}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    --cut: clamp(2.5rem, 5vw, 5rem);
+    padding-block: clamp(5rem, 14vh, 9rem);
+  }
+
+  .nf__inner {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+  }
+
+  .nf p {
+    color: var(--text-2);
+    max-inline-size: 48ch;
+  }
+</style>

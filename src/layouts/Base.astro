@@ -1,0 +1,119 @@
+---
+import '../styles/global.css';
+import Toolbar from '../components/Toolbar.astro';
+import Footer from '../components/Footer.astro';
+import { type Locale, type Route, pathFor } from '../i18n/routes';
+import { t } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  route: Route;
+  title: string;
+  description: string;
+  image?: string;
+  /** Page opens with the logo intro (home only). */
+  intro?: boolean;
+}
+
+const { locale, route, title, description, image, intro = false } = Astro.props;
+const ui = t(locale);
+const site = Astro.site!;
+const canonical = new URL(pathFor(route, locale), site).href;
+const alternates = {
+  en: new URL(pathFor(route, 'en'), site).href,
+  es: new URL(pathFor(route, 'es'), site).href,
+};
+const ogImage = image ? new URL(image, site).href : undefined;
+const isDefaultHome = route.page === 'home' && locale === 'en';
+---
+
+<!doctype html>
+<html lang={locale} class={intro ? undefined : 'intro-seen'}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="en" href={alternates.en} />
+    <link rel="alternate" hreflang="es" href={alternates.es} />
+    <link rel="alternate" hreflang="x-default" href={alternates.en} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#0d1215" />
+    <meta name="color-scheme" content="dark" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MaxyLAND" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={locale === 'es' ? 'es_ES' : 'en_US'} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:site" content="@MaxyLAND_" />
+    <script is:inline define:vars={{ intro, isDefaultHome }}>
+      (function () {
+        var d = document.documentElement;
+        if (intro) {
+          try {
+            if (sessionStorage.getItem('mx-intro')) d.classList.add('intro-seen');
+            else sessionStorage.setItem('mx-intro', '1');
+          } catch (e) {}
+        }
+        // Fallback for the server-side language negotiation in .htaccess.
+        if (isDefaultHome) {
+          var chosen = (document.cookie.match(/(?:^|;\s*)lang=(en|es)/) || [])[1];
+          var langs = navigator.languages || [navigator.language || ''];
+          var prefersEs = String(langs[0] || '').toLowerCase().indexOf('es') === 0;
+          if (chosen === 'es' || (!chosen && prefersEs)) location.replace('/es/');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip pill pill--primary" href="#main">{ui.nav.skip}</a>
+    <Toolbar locale={locale} route={route} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+  </body>
+</html>
+
+<style is:global>
+  .skip {
+    position: fixed;
+    inset-block-start: 0.75rem;
+    inset-inline-start: 0.75rem;
+    z-index: 100;
+    transform: translateY(-200%);
+  }
+
+  .skip:focus {
+    transform: none;
+  }
+
+  /* On the intro page the toolbar waits for the mark to settle. */
+  html:not(.intro-seen) .toolbar {
+    animation: toolbar-in 500ms var(--ease-out) 2050ms both;
+  }
+
+  @keyframes toolbar-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  }
+
+  @keyframes toolbar-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html:not(.intro-seen) .toolbar {
+      animation: toolbar-fade 300ms ease 300ms both;
+    }
+  }
+</style>

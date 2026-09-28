@@ -1,0 +1,81 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Hero from './Hero.astro';
+import ProjectSpotlight from './ProjectSpotlight.astro';
+import ToolsSection from './ToolsSection.astro';
+import ContactSection from './ContactSection.astro';
+import { type Locale } from '../i18n/routes';
+import { t } from '../i18n/ui';
+import { getSteamReviews } from '../data/steam';
+import { profile } from '../data/profile';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = t(locale);
+
+const all = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const games = all.filter((p) => p.data.kind !== 'tool');
+const tools = all.filter((p) => p.data.kind === 'tool');
+const featured = games[0];
+
+const reviews = new Map(
+  await Promise.all(
+    games.map(async (g) => {
+      const steam = g.data.links.find((l) => l.kind === 'steam');
+      const appId = steam?.url.match(/\/app\/(\d+)/)?.[1];
+      return [g.id, appId ? await getSteamReviews(Number(appId)) : null] as const;
+    }),
+  ),
+);
+---
+
+<Base
+  locale={locale}
+  route={{ page: 'home' }}
+  title={ui.meta.homeTitle}
+  description={ui.meta.homeDescription}
+  image={featured?.data.cover.src}
+  intro
+>
+  <Hero locale={locale} featured={{ slug: featured.id, title: featured.data.title }} />
+
+  <section class="projects wrap" id="projects" aria-labelledby="projects-title">
+    <h2 class="section-title" id="projects-title">{ui.projects.title}</h2>
+    <div class="projects__list">
+      {games.map((p) => <ProjectSpotlight project={p} locale={locale} reviews={reviews.get(p.id)} />)}
+    </div>
+  </section>
+
+  <ToolsSection locale={locale} tools={tools} />
+
+  <ContactSection locale={locale} />
+
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: profile.name,
+      url: profile.site,
+      sameAs: Object.values(profile.links),
+      jobTitle: locale === 'es' ? 'Desarrollador de videojuegos y web' : 'Game developer and web designer',
+    })}
+  />
+</Base>
+
+<style>
+  .projects {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.25rem);
+    padding-block: var(--section);
+  }
+
+  .projects__list {
+    display: grid;
+    gap: 1.5rem;
+  }
+</style>

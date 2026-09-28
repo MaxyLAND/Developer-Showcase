@@ -1,0 +1,4 @@
+# app-ads.txt — MaxyLAND Games
+# Authorized sellers for the mobile apps published by MaxyLAND Games.
+# Spec: IAB Tech Lab app-ads.txt 1.0 — https://iabtechlab.com/ads-txt/
+google.com, pub-4266988151385474, DIRECT, f08c47fec0942fa0

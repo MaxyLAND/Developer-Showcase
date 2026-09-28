@@ -1,0 +1,41 @@
+# Builds the site and uploads dist/ to IONOS over SFTP.
+# Disabled until you set the repository variable DEPLOY_ENABLED=true and the
+# secrets IONOS_SFTP_HOST, IONOS_SFTP_USER, IONOS_SFTP_PASSWORD and
+# IONOS_SFTP_PATH (the web root on the server, e.g. "/").
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: ${{ vars.DEPLOY_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - name: Upload to IONOS
+        env:
+          HOST: ${{ secrets.IONOS_SFTP_HOST }}
+          USER: ${{ secrets.IONOS_SFTP_USER }}
+          PASS: ${{ secrets.IONOS_SFTP_PASSWORD }}
+          TARGET: ${{ secrets.IONOS_SFTP_PATH }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+          # Uploads new and changed files only; nothing on the server is deleted.
+          lftp -u "$USER","$PASS" "sftp://$HOST" -e "set sftp:auto-confirm yes; mirror --reverse --only-newer --verbose dist/ ${TARGET:-/}; bye"
